@@ -2,14 +2,12 @@
 using System.Collections;
 
 public class ScalTest : MonoBehaviour {
+    Animator animator;
 
-	// Use this for initialization
-	void Start () {
-	
+	void Start () 
+    {
+        this.animator = gameObject.GetComponent<Animator>();
+        this.animator.SetTrigger("ShowsUp");
 	}
 	
-	// Update is called once per frame
-	void Update () {
-	
-	}
 }
