@@ -23,10 +23,13 @@ public class TouchManagerTest : MonoBehaviour {
                 if (this.hit)
                 {
                     GameObject selectedObject = this.hit.collider.gameObject;
-                    switch (selectedObject.tag) 
+                    switch (selectedObject.name) 
                     {
-                        case "Monster":
+                        case "Scal":
                             selectedObject.SendMessage("ShowsUp");
+                            break;
+                        case "ScalJumpsOut":
+                            selectedObject.SendMessage("JumpsOut");
                             break;
                     }
                 }
