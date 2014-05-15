@@ -7,7 +7,11 @@ public class ScalTest : MonoBehaviour {
 	void Start () 
     {
         this.animator = gameObject.GetComponent<Animator>();
-        this.animator.SetTrigger("ShowsUp");
 	}
+
+    void ShowsUp()
+    {
+        this.animator.SetTrigger("ShowsUp");
+    }
 	
 }
