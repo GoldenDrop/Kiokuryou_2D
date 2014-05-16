@@ -73,7 +73,7 @@ public class HolesShuffle : MonoBehaviour {
             }
             Vector2 holePoint = new Vector2(col * this.xOffset, row * this.yOffset);
 
-            int order = this.selectedList.FindIndex(x => x == i);
+            int order = this.selectedList.FindIndex(x => x == i + 1);
             Debug.Log("Number[" + i + "] order : " + order);
             if (order != -1)
             {
