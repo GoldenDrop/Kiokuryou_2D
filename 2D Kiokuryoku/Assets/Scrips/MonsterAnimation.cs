@@ -6,7 +6,7 @@ public class MonsterAnimation : MonoBehaviour {
     Transform hukidashi;
     bool isTouched = false;
     bool onHukidashi = false;
-    int myTurn = 0; // モンスターが現れた順番
+    int myOrder = 0; // モンスターが現れた順番
 
     void Start()
     {
@@ -19,12 +19,12 @@ public class MonsterAnimation : MonoBehaviour {
         //IntoHole();
     }
 
-    void CheckTurn(int turn)
+    void CheckTurn(int order)
     {
         if (!this.isTouched)// タッチされていないなら
         {
             // タッチされた順番が正しいかチェックする
-            if (this.myTurn == turn) // 正解なら
+            if (this.myOrder == order) // 正解なら
             {
                 this.isTouched = true;
                 JumpsOut();
@@ -89,9 +89,10 @@ public class MonsterAnimation : MonoBehaviour {
     }
 
     // 正解である順番をセット
-    void SetMyTurn(int turn)
+    void SetMyOrder(int order)
     {
-        this.myTurn = turn;
+        Debug.Log("SetMyOrder : " + order);
+        this.myOrder = order;
     }
 	
 }
