@@ -10,9 +10,8 @@ public class Hukidashi : MonoBehaviour {
 	    
 	}
 
-    void ChangeTransparency () 
+    void ChangeTransparency (int alpha) 
     {
-        Color hukidashiColor = new Color(1, 1, 1, 1);
-        this.hukidashiRenderer.color = hukidashiColor;
+        this.hukidashiRenderer.color = new Color(1, 1, 1, alpha);
 	}
 }

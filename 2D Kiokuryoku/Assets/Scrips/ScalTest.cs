@@ -36,7 +36,7 @@ public class ScalTest : MonoBehaviour {
 
         if (stateInfo.nameHash != Animator.StringToHash("Base Layer.Hole"))
         {
-            this.hukidashi.SendMessage("ChangeTransparency");
+            this.hukidashi.SendMessage("ChangeTransparency", 1);
             Debug.Log("Hole Out.");
         }
     }
