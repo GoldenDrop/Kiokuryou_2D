@@ -51,6 +51,7 @@ public class HolesShuffle : MonoBehaviour {
         for (int i = 0; i < rand; i++)
         {
             int selectedNumber = Random.Range(1, MAX_Hole + 1);
+
             if (this.orderList.Contains(selectedNumber))
             {
                 i--;

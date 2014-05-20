@@ -10,34 +10,37 @@ public class TouchManager : MonoBehaviour {
     // オブジェクトをタッチした回数
     int touchNumber = 0; 
 
-
+    // ゲームオブジェクトへの参照
     GameObject mainCamera;
     GameObject title;
     GameObject result;
     GameObject gameController;
-
     GameObject phaseController;
-    PhaseController phaseControlerComponent;
 
+    // phaseControllerオブジェクトのコンポーネントへの参照
+    PhaseController phaseControlerComponent;
 
 
 
     void Start()
     {
-        this.mainCamera     = GameObject.FindWithTag("MainCamera");
-        this.title          = GameObject.FindWithTag("Title");
-        this.result         = GameObject.FindWithTag("Result");
-        this.gameController = GameObject.FindWithTag("GameController");
-
+        this.mainCamera      = GameObject.FindWithTag("MainCamera");
+        this.title           = GameObject.FindWithTag("Title");
+        this.result          = GameObject.FindWithTag("Result");
+        this.gameController  = GameObject.FindWithTag("GameController");
         this.phaseController = GameObject.FindWithTag("PhaseController");
+
         this.phaseControlerComponent = this.phaseController.GetComponent<PhaseController>();
 
     }
 
     void Update()
     {
+        // 現在のフェイズ
         Phase phase = this.phaseControlerComponent.GetPhase();
         Debug.Log("touch phase : " + phase);
+
+        // フェイズ毎にタッチ操作を変える
         switch (phase)
         {
             case Phase.Title:
@@ -58,6 +61,7 @@ public class TouchManager : MonoBehaviour {
         this.touchNumber = 0;
     }
 
+    // Title画面でのタッチ操作
     void TitleOperate ()
     {
         if (Input.touchCount > 0)
@@ -77,6 +81,7 @@ public class TouchManager : MonoBehaviour {
         }
     }
 
+    // ゲーム画面でのタッチ操作
     void GameOperate()
     {
         if (Input.touchCount > 0)
@@ -109,6 +114,8 @@ public class TouchManager : MonoBehaviour {
         }
     }
 
+
+    // Result画面でのタッチ操作
     void ResultOperate()
     {
         if (Input.touchCount > 0)
