@@ -6,6 +6,7 @@ public class TouchManager : MonoBehaviour {
     RaycastHit2D hit;
     Touch touch;
     int touchNumber = 0; // オブジェクトをタッチした回数
+    PhaseController phaseController = new PhaseController();
 
     void Update()
     {
@@ -24,18 +25,18 @@ public class TouchManager : MonoBehaviour {
                 if (this.hit)
                 {
                     GameObject selectedObject = this.hit.collider.gameObject;
-                    switch (selectedObject.tag)
+                    switch (this.phaseController.GetPhase())
                     {
-                        case "Monster":
-                            this.touchNumber++;
-                            Debug.Log("Monster TouchNumber : " + this.touchNumber);
-                            selectedObject.SendMessage("CheckTurn", this.touchNumber);
+                        case Phase.Title:
+                            TitleOperate();
                             break;
-                        case "Hole":
-                            this.touchNumber++;
-                            Debug.Log("Hole TouchNumber : " + this.touchNumber);
-                            // miss処理を送る
+                        case Phase.Game:
+                            GameOperate();
                             break;
+                        case Phase.Result:
+                            ResultOperate();
+                            break;
+                            
                     }
                 }
             }
@@ -45,5 +46,32 @@ public class TouchManager : MonoBehaviour {
     void RestTouchNumber()
     {
         this.touchNumber = 0;
+    }
+
+    void TitleOperate ()
+    {
+
+    }
+
+    void GameOperate()
+    {
+        switch (selectedObject.tag)
+        {
+            case "Monster":
+                this.touchNumber++;
+                Debug.Log("Monster TouchNumber : " + this.touchNumber);
+                selectedObject.SendMessage("CheckTurn", this.touchNumber);
+                break;
+            case "Hole":
+                this.touchNumber++;
+                Debug.Log("Hole TouchNumber : " + this.touchNumber);
+                // miss処理を送る
+                break;
+        }
+    }
+
+    void ResultOperate()
+    {
+
     }
 }

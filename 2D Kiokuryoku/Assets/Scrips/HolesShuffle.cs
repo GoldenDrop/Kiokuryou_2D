@@ -11,14 +11,16 @@ public class HolesShuffle : MonoBehaviour {
 
     GameObject holesBox;
 
-    int maxHole = 20;
-    int maxRow  = 4;
+    const int MAX_Hole = 20;
+    const int MAX_Row  = 4;
 
     float xOffset =  1.4f;
     float yOffset = -1.5f;
 
     List<int> selectedList = new List<int>();
     int randomSelectNumber = 0;
+
+    const Vector2 FIRST_Point = new Vector2(-2.1f, 3.0f); // 1つ目の穴の位置　基準になる
 
 
 
@@ -42,7 +44,7 @@ public class HolesShuffle : MonoBehaviour {
     {
         for (int i = 0; i < rand; i++)
         {
-            int selectedNumber = Random.Range(1, this.maxHole + 1);
+            int selectedNumber = Random.Range(1, MAX_Hole + 1);
             if (this.selectedList.Contains(selectedNumber))
             {
                 i--;
@@ -61,15 +63,14 @@ public class HolesShuffle : MonoBehaviour {
 
     void CreateHoles()
     {
-        Vector2 firstPoint = new Vector2(-2.1f, 3.0f); // 1つ目の穴の位置　基準になる
 
-        for (int i = 0; i < this.maxHole; i++)
+        for (int i = 0; i < MAX_Hole; i++)
         {
-            int row = Mathf.FloorToInt(i / this.maxRow);
+            int row = Mathf.FloorToInt(i / MAX_Row);
             int col = i;
             if (row > 0)
             {
-                col = i - row * maxRow;
+                col = i - row * MAX_Row;
             }
             Vector2 holePoint = new Vector2(col * this.xOffset, row * this.yOffset);
 
@@ -79,14 +80,14 @@ public class HolesShuffle : MonoBehaviour {
             {
                 int rand = Random.Range(0, monstersPrefabList.Length);
                 Debug.Log("rand & monstersPrefabList : " + rand + ", " + (monstersPrefabList.Length + 1));
-                GameObject moster = Instantiate(monstersPrefabList[rand], firstPoint + holePoint, Quaternion.identity) as GameObject;
+                GameObject moster = Instantiate(monstersPrefabList[rand], FIRST_Point + holePoint, Quaternion.identity) as GameObject;
                 moster.transform.parent = this.holesBox.transform;
                 order++;
                 moster.SendMessage("SetMyOrder", order);
             }
             else
             {
-                GameObject hole = Instantiate(holePrefab, firstPoint + holePoint, Quaternion.identity) as GameObject;
+                GameObject hole = Instantiate(holePrefab, FIRST_Point + holePoint, Quaternion.identity) as GameObject;
                 hole.transform.parent = this.holesBox.transform;
             }
         }
