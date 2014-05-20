@@ -7,21 +7,27 @@ public class HolesShuffle : MonoBehaviour {
     public GameObject holesBoxPrefab;
     public GameObject holePrefab;
 
+    // モンスターを３種格納
     public GameObject[] monstersPrefabList = new GameObject[3];
 
+    // 穴オブジェクトを格納する
     GameObject holesBox;
 
+    // 穴の数、列数
     const int MAX_Hole = 20;
     const int MAX_Row  = 4;
 
-    float xOffset =  1.4f;
-    float yOffset = -1.5f;
+    // 1つ目の穴の位置　基準になる
+    const float FIRST_X = -2.1f;
+    const float FIRST_Y =  3.0f;
 
-    List<int> selectedList = new List<int>();
-    int randomSelectNumber = 0;
+    // オフセット　次の穴との間隔
+    const float OFFSET_X =  1.4f;
+    const float OFFSET_Y = -1.5f;
 
-    const Vector2 FIRST_Point = new Vector2(-2.1f, 3.0f); // 1つ目の穴の位置　基準になる
-
+    // モンスターが出現する穴の番号を順に格納
+    // 穴は5行４列の20個で左上から右へ数えて番号を付ける
+    List<int> orderList = new List<int>();
 
 
 
@@ -45,19 +51,19 @@ public class HolesShuffle : MonoBehaviour {
         for (int i = 0; i < rand; i++)
         {
             int selectedNumber = Random.Range(1, MAX_Hole + 1);
-            if (this.selectedList.Contains(selectedNumber))
+            if (this.orderList.Contains(selectedNumber))
             {
                 i--;
             }
             else
             {
-                this.selectedList.Add(selectedNumber);
+                this.orderList.Add(selectedNumber);
             }
         }
 
-        for (int j = 0; j < this.selectedList.Count; j++)
+        for (int j = 0; j < this.orderList.Count; j++)
         {
-            Debug.Log("selectedList[" + j + "] : " + this.selectedList[j]);
+            Debug.Log("orderList[" + j + "] : " + this.orderList[j]);
         }
     }
 
@@ -72,22 +78,23 @@ public class HolesShuffle : MonoBehaviour {
             {
                 col = i - row * MAX_Row;
             }
-            Vector2 holePoint = new Vector2(col * this.xOffset, row * this.yOffset);
 
-            int order = this.selectedList.FindIndex(x => x == i + 1);
+            Vector2 holePoint = new Vector2(FIRST_X + col * OFFSET_X, FIRST_Y + row * OFFSET_Y);
+
+            int order = this.orderList.FindIndex(x => x == i + 1);
             Debug.Log("Number[" + i + "] order : " + order);
             if (order != -1)
             {
                 int rand = Random.Range(0, monstersPrefabList.Length);
                 Debug.Log("rand & monstersPrefabList : " + rand + ", " + (monstersPrefabList.Length + 1));
-                GameObject moster = Instantiate(monstersPrefabList[rand], FIRST_Point + holePoint, Quaternion.identity) as GameObject;
+                GameObject moster = Instantiate(monstersPrefabList[rand], holePoint, Quaternion.identity) as GameObject;
                 moster.transform.parent = this.holesBox.transform;
                 order++;
                 moster.SendMessage("SetMyOrder", order);
             }
             else
             {
-                GameObject hole = Instantiate(holePrefab, FIRST_Point + holePoint, Quaternion.identity) as GameObject;
+                GameObject hole = Instantiate(holePrefab, holePoint, Quaternion.identity) as GameObject;
                 hole.transform.parent = this.holesBox.transform;
             }
         }

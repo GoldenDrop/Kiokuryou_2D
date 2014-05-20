@@ -1,17 +1,20 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class PhaseController { // : MonoBehaviour {
+public  class PhaseController : MonoBehaviour {
 
-    Phase presentPhase = Phase.Wait;
+    Phase phase = Phase.Wait;
 
-    public void SetPhase(Phase phase)
+
+    public void SetPhase(Phase presentPhase)
     {
-        this.presentPhase = phase;
+        this.phase = presentPhase;
     }
+
 
     public Phase GetPhase()
     {
-        return this.presentPhase;
+        return this.phase;
     }
+
 }

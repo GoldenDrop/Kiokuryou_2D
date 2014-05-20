@@ -9,23 +9,13 @@ public class TitleController : MonoBehaviour {
     GameObject title;
     GameObject touchStart;
 
-    PhaseController phaseController = new PhaseController();
 
 	void Start () 
     {
-        // Debug
         CreateTexts();
-        this.phaseController.SetPhase(Phase.Title);
-        
 	}
 	
-	void Update () 
-    {
-        if (this.phaseController.GetPhase() == Phase.Title)
-        {
-            Debug.Log("Title Sreen");
-        }
-	}
+    
 
     void CreateTexts()
     {
