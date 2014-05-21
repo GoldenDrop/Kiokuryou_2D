@@ -16,6 +16,8 @@ public class TouchManager : MonoBehaviour {
     GameObject result;
     GameObject gameController;
     GameObject phaseController;
+    GameObject monsterController;
+
 
     // phaseControllerオブジェクトのコンポーネントへの参照
     PhaseController phaseControlerComponent;
@@ -24,11 +26,13 @@ public class TouchManager : MonoBehaviour {
 
     void Start()
     {
-        this.mainCamera      = GameObject.FindWithTag("MainCamera");
-        this.title           = GameObject.FindWithTag("Title");
-        this.result          = GameObject.FindWithTag("Result");
-        this.gameController  = GameObject.FindWithTag("GameController");
-        this.phaseController = GameObject.FindWithTag("PhaseController");
+        this.mainCamera        = GameObject.FindWithTag("MainCamera");
+        this.title             = GameObject.FindWithTag("Title");
+        this.result            = GameObject.FindWithTag("Result");
+        this.gameController    = GameObject.FindWithTag("GameController");
+        this.phaseController   = GameObject.FindWithTag("PhaseController");
+        this.monsterController = GameObject.FindWithTag("MonsterController");
+
 
         this.phaseControlerComponent = this.phaseController.GetComponent<PhaseController>();
 
@@ -75,7 +79,8 @@ public class TouchManager : MonoBehaviour {
                 this.mainCamera.SendMessage("CameraMove", Screens.Game);
 
                 //Debug
-                this.phaseControlerComponent.SetPhase(Phase.Player);
+                //this.phaseControlerComponent.SetPhase(Phase.Player);
+                this.monsterController.SendMessage("StartStandAnimation");
 
             }
         }
