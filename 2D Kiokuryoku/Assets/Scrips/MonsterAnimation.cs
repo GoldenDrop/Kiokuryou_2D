@@ -5,18 +5,27 @@ public class MonsterAnimation : MonoBehaviour {
     Animator animator;
     Transform hukidashi;
     bool isTouched = false;
-    bool onHukidashi = false;
+    bool isWait = false;
     int myOrder = 0; // モンスターが現れた順番
+
+    const string NAMEHASH_FLONT = "Base Layer.";
+    const string NAMEHASH_BACK  = "Stand";
+    string animatoinName = "";
+
 
     void Start()
     {
         this.animator = gameObject.GetComponent<Animator>();
         this.hukidashi = gameObject.transform.Find("Hukidashi");
 
+        string monsterName = gameObject.name.Replace("(Clone)", "");
+        this.animatoinName = NAMEHASH_FLONT + monsterName + NAMEHASH_BACK;
+
         // デバッグ用
         //SetMyTurn(1);
         //ShowsUp();
         //IntoHole();
+        JumpsOut();
     }
 
     void CheckTurn(int order)
@@ -63,18 +72,27 @@ public class MonsterAnimation : MonoBehaviour {
         AnimatorStateInfo stateInfo = this.animator.GetCurrentAnimatorStateInfo(0);
         Debug.Log("nameHash : " + stateInfo.nameHash);
         Debug.Log("Wait : " + Animator.StringToHash("Base Layer.Wait"));
+        Debug.Log("Goblin Stand : " +Animator.StringToHash("Base Layer.Wait"));
+        Debug.Log(this.animatoinName + " : " + Animator.StringToHash(this.animatoinName));
+
 
 
         if (stateInfo.nameHash == Animator.StringToHash("Base Layer.Wait"))
         {
             Debug.Log("Base Layer.Wait");
-            if (!this.onHukidashi)
+            if (!this.isWait)
             {
-                this.onHukidashi = true;
+                this.isWait = true;
                 int alpha = 1;
                 this.hukidashi.SendMessage("ChangeTransparency", alpha);
             }
         }
+
+        if (stateInfo.nameHash == Animator.StringToHash(this.animatoinName))
+        {
+            Debug.Log("Test Sucsess");
+        }
+
     }
 
     void CreateHukidashiNumber(int number)
