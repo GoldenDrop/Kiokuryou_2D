@@ -10,6 +10,10 @@ public class HolesShuffle : MonoBehaviour {
     // モンスターを３種格納
     public GameObject[] monstersPrefabList = new GameObject[3];
 
+    // GameObjectへの参照
+    GameObject monsterController;
+
+
     // 穴オブジェクトを格納する
     GameObject holesBox;
 
@@ -29,10 +33,13 @@ public class HolesShuffle : MonoBehaviour {
     // 穴は5行４列の20個で左上から右へ数えて番号を付ける
     List<int> orderList = new List<int>();
 
+    // Hole,Monsterオブジェクトを格納
+    List<GameObject> holeObjectList = new List<GameObject>();
 
 
 	void Start () 
     {
+        this.monsterController = GameObject.FindWithTag("MonsterController");
         CreateHolesBox();
         RandomSelect(4);
         CreateHoles();
@@ -88,21 +95,32 @@ public class HolesShuffle : MonoBehaviour {
             {
                 int rand = Random.Range(0, monstersPrefabList.Length);
                 Debug.Log("rand & monstersPrefabList : " + rand + ", " + (monstersPrefabList.Length + 1));
-                GameObject moster = Instantiate(monstersPrefabList[rand], holePoint, Quaternion.identity) as GameObject;
-                moster.transform.parent = this.holesBox.transform;
+                GameObject monster = Instantiate(monstersPrefabList[rand], holePoint, Quaternion.identity) as GameObject;
+                monster.transform.parent = this.holesBox.transform;
                 order++;
-                moster.SendMessage("SetMyOrder", order);
+                monster.SendMessage("SetMyOrder", order);
+                this.holeObjectList.Add(monster);
             }
             else
             {
                 GameObject hole = Instantiate(holePrefab, holePoint, Quaternion.identity) as GameObject;
                 hole.transform.parent = this.holesBox.transform;
+                this.holeObjectList.Add(hole);
+
             }
         }
+        this.monsterController.SendMessage("SetHoleObjectList", this.holeObjectList);
+        this.monsterController.SendMessage("SetOrderList", this.orderList);
     }
 
     void DestroyHoles()
     {
         Destroy(this.holesBox);
+    }
+
+    void ClearList()
+    {
+        this.holeObjectList.Clear();
+        this.orderList.Clear();
     }
 }

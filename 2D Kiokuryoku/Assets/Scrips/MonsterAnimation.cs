@@ -8,24 +8,31 @@ public class MonsterAnimation : MonoBehaviour {
     bool isWait = false;
     int myOrder = 0; // モンスターが現れた順番
 
-    const string NAMEHASH_FLONT = "Base Layer.";
-    const string NAMEHASH_BACK  = "Stand";
+    const string STAND_NAMEHASH_FLONT = "Base Layer.";
+    const string STAND_NAMEHASH_BACK  = "Stand";
     string animatoinName = "";
+
+    // GameObjectへの参照
+    GameObject monsterController;
 
 
     void Start()
     {
+        this.monsterController = GameObject.FindWithTag("MonsterController");
+
         this.animator = gameObject.GetComponent<Animator>();
         this.hukidashi = gameObject.transform.Find("Hukidashi");
 
+        // モンスターの名前を取得
         string monsterName = gameObject.name.Replace("(Clone)", "");
-        this.animatoinName = NAMEHASH_FLONT + monsterName + NAMEHASH_BACK;
+        // モンスターのStandアニメーション名
+        this.animatoinName = STAND_NAMEHASH_FLONT + monsterName + STAND_NAMEHASH_BACK;
 
         // デバッグ用
         //SetMyTurn(1);
         //ShowsUp();
         //IntoHole();
-        JumpsOut();
+        //JumpsOut();
     }
 
     void CheckTurn(int order)
@@ -85,6 +92,7 @@ public class MonsterAnimation : MonoBehaviour {
                 this.isWait = true;
                 int alpha = 1;
                 this.hukidashi.SendMessage("ChangeTransparency", alpha);
+                this.monsterController.SendMessage("StartStandAnimation");
             }
         }
 
