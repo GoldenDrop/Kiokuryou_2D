@@ -7,6 +7,7 @@ public class MainCameraController : MonoBehaviour {
 	void Start () 
     {
         CameraMove(Screens.Title);
+        //CameraMove(Screens.Game);
 	}
 	
     void CameraMove(Screens screen)

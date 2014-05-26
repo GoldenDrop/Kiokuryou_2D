@@ -76,12 +76,7 @@ public class TouchManager : MonoBehaviour {
             {
                 this.phaseControlerComponent.SetPhase(Phase.Wait);
                 this.title.SendMessage("DestroyTexts");
-                this.mainCamera.SendMessage("CameraMove", Screens.Game);
-
-                //Debug
-                //this.phaseControlerComponent.SetPhase(Phase.Player);
-                this.monsterController.SendMessage("StartStandAnimation");
-
+                this.gameController.SendMessage("StartMemorizePhase");
             }
         }
     }

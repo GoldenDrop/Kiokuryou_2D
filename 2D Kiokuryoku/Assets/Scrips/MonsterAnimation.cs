@@ -3,7 +3,7 @@ using System.Collections;
 
 public class MonsterAnimation : MonoBehaviour {
     Animator animator;
-    Transform hukidashi;
+    Transform balloon;
     bool isTouched = false;
     bool isWait = false;
     int myOrder = 0; // モンスターが現れた順番
@@ -15,13 +15,16 @@ public class MonsterAnimation : MonoBehaviour {
     // GameObjectへの参照
     GameObject monsterController;
 
+    // 数字オブジェクトのリスト
+    public GameObject[] numberObjectPrefabList = new GameObject[10];
+
 
     void Start()
     {
         this.monsterController = GameObject.FindWithTag("MonsterController");
 
         this.animator = gameObject.GetComponent<Animator>();
-        this.hukidashi = gameObject.transform.Find("Hukidashi");
+        this.balloon = gameObject.transform.Find("Balloon");
 
         // モンスターの名前を取得
         string monsterName = gameObject.name.Replace("(Clone)", "");
@@ -69,11 +72,12 @@ public class MonsterAnimation : MonoBehaviour {
     {
         this.animator.SetTrigger("IntoHole");
         int alpha = 0;
-        this.hukidashi.SendMessage("ChangeTransparency", alpha);
+        this.balloon.SendMessage("ChangeTransparency", alpha);
         // 吹き出しの数字オブジェクトを削除
         // DestroyNumberObject();
     }
 
+    /*
     void Update()
     {
         AnimatorStateInfo stateInfo = this.animator.GetCurrentAnimatorStateInfo(0);
@@ -91,8 +95,8 @@ public class MonsterAnimation : MonoBehaviour {
             {
                 this.isWait = true;
                 int alpha = 1;
-                this.hukidashi.SendMessage("ChangeTransparency", alpha);
-                this.monsterController.SendMessage("StartStandAnimation");
+                this.balloon.SendMessage("ChangeTransparency", alpha);
+                this.monsterController.SendMessage("StartShowsUpAnimation");
             }
         }
 
@@ -101,9 +105,9 @@ public class MonsterAnimation : MonoBehaviour {
             Debug.Log("Test Sucsess");
         }
 
-    }
+    }*/
 
-    void CreateHukidashiNumber(int number)
+    void CreateBalloonNumber(int number)
     {
         // 吹き出しに入れる数字オブジェクトを生成する
         // 吹き出しの子オブジェクトとする
@@ -119,6 +123,18 @@ public class MonsterAnimation : MonoBehaviour {
     {
         Debug.Log("SetMyOrder : " + order);
         this.myOrder = order;
+    }
+
+    void DisplayBalloon()
+    {
+        int alpha = 1;
+        this.balloon.SendMessage("ChangeTransparency", alpha);
+    }
+
+    void StartNextMonsterAnimation()
+    {
+        Debug.Log("StartNextMonsterAnimation");
+        this.monsterController.SendMessage("StartShowsUpAnimation");
     }
 	
 }
