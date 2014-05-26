@@ -9,9 +9,19 @@ public class MonsterController : MonoBehaviour {
     List<int>        orderList      = new List<int>();
     int orderNumber = 0;
 
-	void Start () 
+    GameObject phaseController;
+    GameObject systemMessage;
+
+    PhaseController phaseControlerComponent;
+
+
+    void Start () 
     {
-	
+        this.phaseController = GameObject.FindWithTag("PhaseController");
+        this.systemMessage   = GameObject.FindWithTag("SystemMessage");
+
+        this.phaseControlerComponent = this.phaseController.GetComponent<PhaseController>();
+	    
 	}
 
     void SetHoleObjectList (List<GameObject> list) 
@@ -38,8 +48,13 @@ public class MonsterController : MonoBehaviour {
     }
     
 
-    void StartStandAnimation()
+    void StartShowsUpAnimation()
     {
+        if (this.orderNumber == 0)
+        {
+            this.phaseControlerComponent.SetPhase(Phase.Memorizes);
+        }
+
         if (this.orderNumber < this.orderList.Count)
         {
             Debug.Log(this.orderList[orderNumber]);
@@ -50,12 +65,14 @@ public class MonsterController : MonoBehaviour {
         }
         else
         {
+            this.phaseControlerComponent.SetPhase(Phase.Wait);
+
             // 暗幕を下ろす
-            /*
+            this.systemMessage.SendMessage("TakenDownBlackCurtain");
+
             this.holeObjectList.Clear();
             this.orderList.Clear();
             this.orderNumber = 0;
-            */
         }
     }
 }
