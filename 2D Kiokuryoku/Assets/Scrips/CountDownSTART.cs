@@ -4,8 +4,6 @@ using System.Collections;
 public class CountDownSTART : MonoBehaviour {
 
     float alpha = 1;
-    float timer = 0;
-    const float INTERVAL = 0.1f;
     SpriteRenderer spriteRenderer;
 
     void Start()
