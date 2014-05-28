@@ -77,35 +77,6 @@ public class MonsterAnimation : MonoBehaviour {
         // DestroyNumberObject();
     }
 
-    /*
-    void Update()
-    {
-        AnimatorStateInfo stateInfo = this.animator.GetCurrentAnimatorStateInfo(0);
-        Debug.Log("nameHash : " + stateInfo.nameHash);
-        Debug.Log("Wait : " + Animator.StringToHash("Base Layer.Wait"));
-        Debug.Log("Goblin Stand : " +Animator.StringToHash("Base Layer.Wait"));
-        Debug.Log(this.animatoinName + " : " + Animator.StringToHash(this.animatoinName));
-
-
-
-        if (stateInfo.nameHash == Animator.StringToHash("Base Layer.Wait"))
-        {
-            Debug.Log("Base Layer.Wait");
-            if (!this.isWait)
-            {
-                this.isWait = true;
-                int alpha = 1;
-                this.balloon.SendMessage("ChangeTransparency", alpha);
-                this.monsterController.SendMessage("StartShowsUpAnimation");
-            }
-        }
-
-        if (stateInfo.nameHash == Animator.StringToHash(this.animatoinName))
-        {
-            Debug.Log("Test Sucsess");
-        }
-
-    }*/
 
     void CreateBalloonNumber(int number)
     {
