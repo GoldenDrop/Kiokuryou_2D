@@ -23,7 +23,6 @@ public class SystemMessage : MonoBehaviour {
 	
     void StartCountDown()
     {
-        TakenUpBlackCurtain();
         this.countDown.SendMessage("SetMessage", Messages.CountDown);
     }
 

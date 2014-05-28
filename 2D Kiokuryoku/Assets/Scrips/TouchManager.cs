@@ -42,7 +42,7 @@ public class TouchManager : MonoBehaviour {
     {
         // 現在のフェイズ
         Phase phase = this.phaseControlerComponent.GetPhase();
-        Debug.Log("touch phase : " + phase);
+        //Debug.Log("touch phase : " + phase);
 
         // フェイズ毎にタッチ操作を変える
         switch (phase)

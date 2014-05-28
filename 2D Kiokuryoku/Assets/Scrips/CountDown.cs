@@ -10,7 +10,7 @@ public class CountDown : MonoBehaviour {
 
     float timer = 0;
     const float INTERVAL = 1.0f;
-    const int MAX_NUMBER = 5;
+    const int MAX_NUMBER = 4;
     int count;
 
     GameObject monsterController;
@@ -56,10 +56,11 @@ public class CountDown : MonoBehaviour {
                         break;
                     case -1:
                         this.count = MAX_NUMBER;
-                        this.monsterController.SendMessage("StartShowsUpAnimation");
+                        //this.monsterController.SendMessage("StartShowsUpAnimation");
                         this.message = Messages.None;
                         break;
                 }
+
 
                 this.timer = 0;
             }

@@ -7,6 +7,8 @@ public class GameController : MonoBehaviour {
     GameObject systemMessage;
     GameObject mainCamera;
 
+    GameObject monsterController;
+
 
     PhaseController phaseControlerComponent;
 
@@ -16,6 +18,7 @@ public class GameController : MonoBehaviour {
         this.systemMessage   = GameObject.FindWithTag("SystemMessage");
         this.mainCamera = GameObject.FindWithTag("MainCamera");
 
+        this.monsterController = GameObject.FindWithTag("MonsterController");
 
         this.phaseControlerComponent = this.phaseController.GetComponent<PhaseController>();
         this.phaseControlerComponent.SetPhase(Phase.Title);
@@ -28,18 +31,47 @@ public class GameController : MonoBehaviour {
 
     void StartMemorizePhase()
     {
+        Debug.Log("StartMemorizePhase");
+        StartCoroutine("MemorizePhase");
+    }
+
+    IEnumerator MemorizePhase()
+    {
+        Debug.Log("MemorizePhase");
         // 暗幕移動
         this.systemMessage.SendMessage("CreateBlackCurtain", Screens.Title);
         this.systemMessage.SendMessage("TakenDownBlackCurtain");
+        yield return new WaitForSeconds(1.0f);
         this.mainCamera.SendMessage("CameraMove", Screens.Game);
-        //this.systemMessage.SendMessage("TakenDownBlackCurtain");
+        this.systemMessage.SendMessage("TakenUpBlackCurtain");
+        yield return new WaitForSeconds(1.0f);
+        this.phaseControlerComponent.SetPhase(Phase.Memorizes);
         this.systemMessage.SendMessage("StartCountDown");
-        //this.monsterController.SendMessage("StartShowsUpAnimation");
+        yield return new WaitForSeconds(5.5f);
+        this.monsterController.SendMessage("StartShowsUpAnimation");
     }
+
+    
+
 
     void StartPlayerPhase()
     {
+        Debug.Log("StartPlayerPhase");
+        StartCoroutine("PlayerPhase");
+    }
 
+    IEnumerator PlayerPhase()
+    {
+        this.phaseControlerComponent.SetPhase(Phase.Wait);
+        this.systemMessage.SendMessage("CreateBlackCurtain", Screens.Game);
+        yield return new WaitForSeconds(1.0f);
+        this.systemMessage.SendMessage("TakenDownBlackCurtain");
+        yield return new WaitForSeconds(1.0f);
+        this.monsterController.SendMessage("StarIntoHoleAnimation");
+        yield return new WaitForSeconds(1.0f);
+        this.systemMessage.SendMessage("TakenUpBlackCurtain");
+        yield return new WaitForSeconds(1.0f);
+        this.phaseControlerComponent.SetPhase(Phase.Player);
     }
 
     void GameOver()

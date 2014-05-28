@@ -9,20 +9,16 @@ public class MonsterController : MonoBehaviour {
     List<int>        orderList      = new List<int>();
     int orderNumber = 0;
 
-    GameObject phaseController;
+    GameObject gameController;
     GameObject systemMessage;
 
-    PhaseController phaseControlerComponent;
 
 
-    void Start () 
+    void Start()
     {
-        this.phaseController = GameObject.FindWithTag("PhaseController");
-        this.systemMessage   = GameObject.FindWithTag("SystemMessage");
-
-        this.phaseControlerComponent = this.phaseController.GetComponent<PhaseController>();
-	    
-	}
+        this.systemMessage = GameObject.FindWithTag("SystemMessage");
+        this.gameController = GameObject.FindWithTag("GameController");
+    }
 
     void SetHoleObjectList (List<GameObject> list) 
     {
@@ -50,10 +46,13 @@ public class MonsterController : MonoBehaviour {
 
     void StartShowsUpAnimation()
     {
-        if (this.orderNumber == 0)
-        {
-            this.phaseControlerComponent.SetPhase(Phase.Memorizes);
-        }
+        StartCoroutine("ShowsUpAnimation");
+        
+    }
+
+    IEnumerator ShowsUpAnimation()
+    {
+        //yield return new WaitForSeconds(0.1f);
 
         if (this.orderNumber < this.orderList.Count)
         {
@@ -65,14 +64,27 @@ public class MonsterController : MonoBehaviour {
         }
         else
         {
-            this.phaseControlerComponent.SetPhase(Phase.Wait);
-
-            // 暗幕を下ろす
-            this.systemMessage.SendMessage("TakenDownBlackCurtain");
-
+            yield return new WaitForSeconds(3.0f);
+            Debug.Log("Monster Animation Finish");
+            this.gameController.SendMessage("StartPlayerPhase");
+            this.orderNumber = 0;
+            /*
             this.holeObjectList.Clear();
             this.orderList.Clear();
             this.orderNumber = 0;
+            */
+        }
+    }
+
+    void StarIntoHoleAnimation()
+    {
+        int order = 0;
+        for (int i = 0; i < this.orderList.Count; i++)
+        {
+            GameObject monsterObject = this.holeObjectList[this.orderList[order] - 1];
+            Debug.Log(monsterObject.name);
+            monsterObject.SendMessage("IntoHole");
+            order++;
         }
     }
 }
