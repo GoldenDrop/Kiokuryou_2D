@@ -47,9 +47,13 @@ public class MonsterAnimation : MonoBehaviour {
             else // 不正解なら
             {
                 Debug.Log("Touch Miss");
+
+                // SEをならす
+
+                // AngryBalloonを作成する
+                CreateBalloon(BalloonType.Angry);
+
                 // missメッセージを出す
-                // 
-                // 
             }
         }
     }
@@ -71,6 +75,7 @@ public class MonsterAnimation : MonoBehaviour {
     }
 
 
+    // 吹き出しを生成
     void CreateBalloon(BalloonType type)
     {
         
@@ -87,23 +92,19 @@ public class MonsterAnimation : MonoBehaviour {
                 balloonPath = PATH + BalloonType.Angry.ToString();
                 break;
         }
+
         GameObject balloonPrefab = Resources.Load(balloonPath) as GameObject;
         this.orderBalloon = Instantiate(balloonPrefab, transform.position + balloonPoint, Quaternion.identity) as GameObject;
         this.orderBalloon.transform.parent = gameObject.transform;
     }
 
-
-    void DesplayNumbersBalloon()
-    {
-        CreateBalloon(BalloonType.Numbers);
-    }
-
+    // 吹き出しを削除
     void DestroyBalloon()
     {
         Destroy(this.orderBalloon);
     }
 
-    // 正解である順番をセット
+    // 正解の順番をセット
     void SetMyOrder(int order)
     {
         Debug.Log("SetMyOrder : " + order);
@@ -114,7 +115,6 @@ public class MonsterAnimation : MonoBehaviour {
     // ********** AnimationEventで呼ぶ関数　ここから **********
     void StartNextMonsterAnimation()
     {
-        Debug.Log("StartNextMonsterAnimation");
         this.monsterController.SendMessage("StartShowsUpAnimation");
     }
 

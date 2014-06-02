@@ -42,12 +42,20 @@ public class GameController : MonoBehaviour {
         this.systemMessage.SendMessage("CreateBlackCurtain", Screens.Title);
         this.systemMessage.SendMessage("TakenDownBlackCurtain");
         yield return new WaitForSeconds(1.0f);
+
+        // MainCameraをゲーム画面へ移動
         this.mainCamera.SendMessage("CameraMove", Screens.Game);
+
+        // 暗幕移動
         this.systemMessage.SendMessage("TakenUpBlackCurtain");
         yield return new WaitForSeconds(1.0f);
+
+        // カウントダウン開始
         this.phaseControlerComponent.SetPhase(Phase.Memorizes);
-        this.systemMessage.SendMessage("StartCountDown");
+        this.systemMessage.SendMessage("DisplayMessage", Messages.CountDown);
         yield return new WaitForSeconds(5.5f);
+
+        // モンスターのアニメーション開始
         this.monsterController.SendMessage("StartShowsUpAnimation");
     }
 

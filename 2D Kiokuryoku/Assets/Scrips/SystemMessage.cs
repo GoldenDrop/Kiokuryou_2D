@@ -3,17 +3,15 @@ using System.Collections;
 
 public class SystemMessage : MonoBehaviour {
 
-    public GameObject blackCurtainPrefab;
-    public GameObject stageClearPrefab;
-    public GameObject GameCearPrefab;
-    public GameObject gameOverPrefab;
-
+    const string BLACK_CURTAIN = "BlackCurtain";
     GameObject blackCurtain;
-    Transform countDown;
 
+    Transform countDown;
     Vector2 startPoint;
     Quaternion rotation;
 
+    // リソースまでのパス
+    const string PATH = "Prefabs/Messages/";
 
 	void Start () 
     {
@@ -21,9 +19,32 @@ public class SystemMessage : MonoBehaviour {
         this.rotation.eulerAngles = new Vector3(0, 0, 0.0f);
 	}
 	
-    void StartCountDown()
+
+    void TakenUpBlackCurtain()
     {
-        this.countDown.SendMessage("SetMessage", Messages.CountDown);
+        this.blackCurtain.SendMessage("ChangeMessage", Messages.BlackCurtainTakenUp);
+    }
+
+    void TakenDownBlackCurtain ()
+    {
+        this.blackCurtain.SendMessage("ChangeMessage", Messages.BlackCurtainTakenDown);
+
+    }
+
+    void DisplayMessage(Messages message)
+    {
+
+        if (message == Messages.CountDown) // カウントダウン開始なら
+        {
+            this.countDown.SendMessage("SetMessage", Messages.CountDown);
+        }
+        else // それ以外のメッセージなら
+        {
+            string messagePath = PATH + message.ToString();
+            GameObject messageObjectPrefab = Resources.Load(messagePath) as GameObject;
+            GameObject messageObject = Instantiate(messageObjectPrefab, Vector3.zero, Quaternion.identity) as GameObject;
+            messageObject.transform.parent = gameObject.transform;
+        }
     }
 
     void CreateBlackCurtain(Screens screen)
@@ -37,27 +58,18 @@ public class SystemMessage : MonoBehaviour {
                 this.startPoint = new Vector2(0.0f, 15.0f);
                 break;
             case Screens.Result:
-                this.startPoint = new Vector2( 20.0f, 15.0f);
+                this.startPoint = new Vector2(20.0f, 15.0f);
                 break;
         }
-
+        string blackCurtainPath = PATH + BLACK_CURTAIN;
+        GameObject blackCurtainPrefab = Resources.Load(blackCurtainPath) as GameObject;
         this.blackCurtain = Instantiate(blackCurtainPrefab, this.startPoint, this.rotation) as GameObject;
         this.blackCurtain.transform.parent = gameObject.transform;
-    }
-
-    void TakenUpBlackCurtain()
-    {
-        this.blackCurtain.SendMessage("ChangeMessage", Messages.BlackCurtainTakenUp);
-    }
-
-    void TakenDownBlackCurtain ()
-    {
-        this.blackCurtain.SendMessage("ChangeMessage", Messages.BlackCurtainTakenDown);
-
     }
 
     void DestroyBlackCurtain ()
     {
         Destroy(this.blackCurtain);
     }
+
 }

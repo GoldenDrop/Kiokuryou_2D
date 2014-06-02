@@ -18,9 +18,12 @@ public class TouchManager : MonoBehaviour {
     GameObject phaseController;
     GameObject monsterController;
 
+    // タッチされたハズレの穴
+    GameObject toucedHole;
 
     // phaseControllerオブジェクトのコンポーネントへの参照
     PhaseController phaseControlerComponent;
+
 
 
 
@@ -106,6 +109,8 @@ public class TouchManager : MonoBehaviour {
                         case "Hole":
                             this.touchNumber++;
                             Debug.Log("Hole TouchNumber : " + this.touchNumber);
+                            this.toucedHole = this.hit.collider.gameObject;
+                            this.toucedHole.SendMessage("CreateMissBalloon");
                             // miss処理を送る
                             break;
                     }
