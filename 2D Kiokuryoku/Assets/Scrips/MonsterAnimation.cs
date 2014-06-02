@@ -3,20 +3,22 @@ using System.Collections;
 
 public class MonsterAnimation : MonoBehaviour {
     Animator animator;
-    Transform balloon;
     bool isTouched = false;
-    bool isWait = false;
-    int myOrder = 0; // モンスターが現れた順番
 
-    const string STAND_NAMEHASH_FLONT = "Base Layer.";
-    const string STAND_NAMEHASH_BACK  = "Stand";
-    string animatoinName = "";
+    // アタッチしているモンスターが現れた順番
+    int myOrder = 0; 
+
+    // リソースまでのパス
+    const string PATH = "Prefabs/Balloon/B_";
+
+    const float BALLOON_OFFSET_X = 0.6f;
 
     // GameObjectへの参照
     GameObject monsterController;
 
-    // 数字オブジェクトのリスト
-    public GameObject[] numberObjectPrefabList = new GameObject[10];
+    // オーダー番号の吹き出し
+    GameObject orderBalloon;
+
 
 
     void Start()
@@ -24,12 +26,6 @@ public class MonsterAnimation : MonoBehaviour {
         this.monsterController = GameObject.FindWithTag("MonsterController");
 
         this.animator = gameObject.GetComponent<Animator>();
-        this.balloon = gameObject.transform.Find("Balloon");
-
-        // モンスターの名前を取得
-        string monsterName = gameObject.name.Replace("(Clone)", "");
-        // モンスターのStandアニメーション名
-        this.animatoinName = STAND_NAMEHASH_FLONT + monsterName + STAND_NAMEHASH_BACK;
 
         // デバッグ用
         //SetMyTurn(1);
@@ -71,22 +67,40 @@ public class MonsterAnimation : MonoBehaviour {
     void IntoHole()
     {
         this.animator.SetTrigger("IntoHole");
-        int alpha = 0;
-        this.balloon.SendMessage("ChangeTransparency", alpha);
-        // 吹き出しの数字オブジェクトを削除
-        // DestroyNumberObject();
+        DestroyBalloon();
     }
 
 
-    void CreateBalloonNumber(int number)
+    void CreateBalloon(BalloonType type)
     {
-        // 吹き出しに入れる数字オブジェクトを生成する
-        // 吹き出しの子オブジェクトとする
+        
+        Vector3 balloonPoint = new Vector3(0, BALLOON_OFFSET_X, 0);
+        string balloonPath = "";
+
+        switch (type)
+        {
+            case BalloonType.Numbers:
+                balloonPath = PATH + this.myOrder;
+                break;
+
+            case BalloonType.Angry:
+                balloonPath = PATH + BalloonType.Angry.ToString();
+                break;
+        }
+        GameObject balloonPrefab = Resources.Load(balloonPath) as GameObject;
+        this.orderBalloon = Instantiate(balloonPrefab, transform.position + balloonPoint, Quaternion.identity) as GameObject;
+        this.orderBalloon.transform.parent = gameObject.transform;
     }
 
-    void DestroyNumberObject()
+
+    void DesplayNumbersBalloon()
     {
-        // 吹き出しの数字オブジェクトを削除
+        CreateBalloon(BalloonType.Numbers);
+    }
+
+    void DestroyBalloon()
+    {
+        Destroy(this.orderBalloon);
     }
 
     // 正解である順番をセット
@@ -96,16 +110,19 @@ public class MonsterAnimation : MonoBehaviour {
         this.myOrder = order;
     }
 
-    void DisplayBalloon()
-    {
-        int alpha = 1;
-        this.balloon.SendMessage("ChangeTransparency", alpha);
-    }
 
+    // ********** AnimationEventで呼ぶ関数　ここから **********
     void StartNextMonsterAnimation()
     {
         Debug.Log("StartNextMonsterAnimation");
         this.monsterController.SendMessage("StartShowsUpAnimation");
     }
+
+    void DisplayNumbersBalloon()
+    {
+        CreateBalloon(BalloonType.Numbers);
+    }
+    // ********** AnimationEventで呼ぶ関数　ここまで **********
+
 	
 }
