@@ -17,6 +17,7 @@ public class CountDownNumbers : MonoBehaviour {
         this.localScale = new Vector3(transform.localScale.x, transform.localScale.y, transform.localScale.z);
         this.timer += Time.deltaTime;
 
+        // 時間経過に比例して、アタッチした数字オブジェクトのサイズを小さくする
         if (this.timer > INTERVAL)
         {
             gameObject.transform.localScale = localScale * 1 / 1.5f;

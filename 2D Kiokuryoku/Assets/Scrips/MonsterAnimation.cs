@@ -3,20 +3,22 @@ using System.Collections;
 
 public class MonsterAnimation : MonoBehaviour {
     Animator animator;
-    Transform balloon;
     bool isTouched = false;
-    bool isWait = false;
-    int myOrder = 0; // モンスターが現れた順番
 
-    const string STAND_NAMEHASH_FLONT = "Base Layer.";
-    const string STAND_NAMEHASH_BACK  = "Stand";
-    string animatoinName = "";
+    // アタッチしているモンスターが現れた順番
+    int myOrder = 0; 
+
+    // リソースまでのパス
+    const string PATH = "Prefabs/Balloon/B_";
+
+    const float BALLOON_OFFSET_X = 0.6f;
 
     // GameObjectへの参照
     GameObject monsterController;
 
-    // 数字オブジェクトのリスト
-    public GameObject[] numberObjectPrefabList = new GameObject[10];
+    // オーダー番号の吹き出し
+    GameObject orderBalloon;
+
 
 
     void Start()
@@ -24,12 +26,6 @@ public class MonsterAnimation : MonoBehaviour {
         this.monsterController = GameObject.FindWithTag("MonsterController");
 
         this.animator = gameObject.GetComponent<Animator>();
-        this.balloon = gameObject.transform.Find("Balloon");
-
-        // モンスターの名前を取得
-        string monsterName = gameObject.name.Replace("(Clone)", "");
-        // モンスターのStandアニメーション名
-        this.animatoinName = STAND_NAMEHASH_FLONT + monsterName + STAND_NAMEHASH_BACK;
 
         // デバッグ用
         //SetMyTurn(1);
@@ -51,9 +47,13 @@ public class MonsterAnimation : MonoBehaviour {
             else // 不正解なら
             {
                 Debug.Log("Touch Miss");
+
+                // SEをならす
+
+                // AngryBalloonを作成する
+                CreateBalloon(BalloonType.Angry);
+
                 // missメッセージを出す
-                // 
-                // 
             }
         }
     }
@@ -71,70 +71,58 @@ public class MonsterAnimation : MonoBehaviour {
     void IntoHole()
     {
         this.animator.SetTrigger("IntoHole");
-        int alpha = 0;
-        this.balloon.SendMessage("ChangeTransparency", alpha);
-        // 吹き出しの数字オブジェクトを削除
-        // DestroyNumberObject();
+        DestroyBalloon();
     }
 
-    /*
-    void Update()
+
+    // 吹き出しを生成
+    void CreateBalloon(BalloonType type)
     {
-        AnimatorStateInfo stateInfo = this.animator.GetCurrentAnimatorStateInfo(0);
-        Debug.Log("nameHash : " + stateInfo.nameHash);
-        Debug.Log("Wait : " + Animator.StringToHash("Base Layer.Wait"));
-        Debug.Log("Goblin Stand : " +Animator.StringToHash("Base Layer.Wait"));
-        Debug.Log(this.animatoinName + " : " + Animator.StringToHash(this.animatoinName));
+        
+        Vector3 balloonPoint = new Vector3(0, BALLOON_OFFSET_X, 0);
+        string balloonPath = "";
 
-
-
-        if (stateInfo.nameHash == Animator.StringToHash("Base Layer.Wait"))
+        switch (type)
         {
-            Debug.Log("Base Layer.Wait");
-            if (!this.isWait)
-            {
-                this.isWait = true;
-                int alpha = 1;
-                this.balloon.SendMessage("ChangeTransparency", alpha);
-                this.monsterController.SendMessage("StartShowsUpAnimation");
-            }
+            case BalloonType.Numbers:
+                balloonPath = PATH + this.myOrder;
+                break;
+
+            case BalloonType.Angry:
+                balloonPath = PATH + BalloonType.Angry.ToString();
+                break;
         }
 
-        if (stateInfo.nameHash == Animator.StringToHash(this.animatoinName))
-        {
-            Debug.Log("Test Sucsess");
-        }
-
-    }*/
-
-    void CreateBalloonNumber(int number)
-    {
-        // 吹き出しに入れる数字オブジェクトを生成する
-        // 吹き出しの子オブジェクトとする
+        GameObject balloonPrefab = Resources.Load(balloonPath) as GameObject;
+        this.orderBalloon = Instantiate(balloonPrefab, transform.position + balloonPoint, Quaternion.identity) as GameObject;
+        this.orderBalloon.transform.parent = gameObject.transform;
     }
 
-    void DestroyNumberObject()
+    // 吹き出しを削除
+    void DestroyBalloon()
     {
-        // 吹き出しの数字オブジェクトを削除
+        Destroy(this.orderBalloon);
     }
 
-    // 正解である順番をセット
+    // 正解の順番をセット
     void SetMyOrder(int order)
     {
         Debug.Log("SetMyOrder : " + order);
         this.myOrder = order;
     }
 
-    void DisplayBalloon()
-    {
-        int alpha = 1;
-        this.balloon.SendMessage("ChangeTransparency", alpha);
-    }
 
+    // ********** AnimationEventで呼ぶ関数　ここから **********
     void StartNextMonsterAnimation()
     {
-        Debug.Log("StartNextMonsterAnimation");
         this.monsterController.SendMessage("StartShowsUpAnimation");
     }
+
+    void DisplayNumbersBalloon()
+    {
+        CreateBalloon(BalloonType.Numbers);
+    }
+    // ********** AnimationEventで呼ぶ関数　ここまで **********
+
 	
 }
