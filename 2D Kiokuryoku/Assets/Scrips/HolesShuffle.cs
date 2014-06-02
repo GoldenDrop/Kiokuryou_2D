@@ -7,8 +7,8 @@ public class HolesShuffle : MonoBehaviour {
     public GameObject holesBoxPrefab;
     public GameObject holePrefab;
 
-    // モンスターを３種格納
-    public GameObject[] monstersPrefabList = new GameObject[3];
+    // モンスターを格納
+    public GameObject[] monstersPrefabList;
 
     // GameObjectへの参照
     GameObject monsterController;
@@ -93,9 +93,8 @@ public class HolesShuffle : MonoBehaviour {
             Debug.Log("Number[" + i + "] order : " + order);
             if (order != -1)
             {
-                int rand = Random.Range(0, monstersPrefabList.Length);
-                Debug.Log("rand & monstersPrefabList : " + rand + ", " + (monstersPrefabList.Length + 1));
-                GameObject monster = Instantiate(monstersPrefabList[rand], holePoint, Quaternion.identity) as GameObject;
+                int chooseNumber = Random.Range(0, monstersPrefabList.Length);
+                GameObject monster = Instantiate(monstersPrefabList[chooseNumber], holePoint, Quaternion.identity) as GameObject;
                 monster.transform.parent = this.holesBox.transform;
                 order++;
                 monster.SendMessage("SetMyOrder", order);
