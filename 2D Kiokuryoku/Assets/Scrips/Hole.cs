@@ -13,7 +13,6 @@ public class Hole : MonoBehaviour {
 
     void CreateMissBalloon()
     {
-
         Vector3 balloonPoint = new Vector3(0, BALLOON_OFFSET_X, 0);
         string balloonPath = PATH + BalloonType.Miss.ToString();
         GameObject balloonPrefab = Resources.Load(balloonPath) as GameObject;
