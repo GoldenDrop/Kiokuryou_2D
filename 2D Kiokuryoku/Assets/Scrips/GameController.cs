@@ -6,19 +6,27 @@ public class GameController : MonoBehaviour {
     GameObject phaseController;
     GameObject systemMessage;
     GameObject mainCamera;
-
     GameObject monsterController;
+    GameObject gameMessageWindows;
+    GameObject stageController;
+    GameObject touchManager;
+    
+
 
 
     PhaseController phaseControlerComponent;
 
 	void Start () 
     {
-        this.phaseController = GameObject.FindWithTag("PhaseController");   
-        this.systemMessage   = GameObject.FindWithTag("SystemMessage");
-        this.mainCamera = GameObject.FindWithTag("MainCamera");
+        this.phaseController    = GameObject.FindWithTag("PhaseController");   
+        this.systemMessage      = GameObject.FindWithTag("SystemMessage");
+        this.mainCamera         = GameObject.FindWithTag("MainCamera");
+        this.monsterController  = GameObject.FindWithTag("MonsterController");
+        this.gameMessageWindows = GameObject.FindWithTag("GameMessageWindows");
+        this.stageController    = GameObject.FindWithTag("StageController");
+        this.touchManager       = GameObject.FindWithTag("TouchManager");
 
-        this.monsterController = GameObject.FindWithTag("MonsterController");
+
 
         this.phaseControlerComponent = this.phaseController.GetComponent<PhaseController>();
         this.phaseControlerComponent.SetPhase(Phase.Title);
@@ -39,7 +47,7 @@ public class GameController : MonoBehaviour {
     {
         Debug.Log("MemorizePhase");
         // 暗幕移動
-        this.systemMessage.SendMessage("CreateBlackCurtain", Screens.Title);
+        this.systemMessage.SendMessage("MoveBlackCurtain", Screens.Title);
         this.systemMessage.SendMessage("TakenDownBlackCurtain");
         yield return new WaitForSeconds(1.0f);
 
@@ -52,6 +60,7 @@ public class GameController : MonoBehaviour {
 
         // カウントダウン開始
         this.phaseControlerComponent.SetPhase(Phase.Memorizes);
+        this.gameMessageWindows.SendMessage("DisplayTexts", Phase.Memorizes);
         this.systemMessage.SendMessage("DisplayMessage", Messages.CountDown);
         yield return new WaitForSeconds(5.5f);
 
@@ -71,27 +80,122 @@ public class GameController : MonoBehaviour {
     IEnumerator PlayerPhase()
     {
         this.phaseControlerComponent.SetPhase(Phase.Wait);
-        this.systemMessage.SendMessage("CreateBlackCurtain", Screens.Game);
-        yield return new WaitForSeconds(1.0f);
+        this.gameMessageWindows.SendMessage("EraseTexts");
+        this.systemMessage.SendMessage("MoveBlackCurtain", Screens.Game);
+        //yield return new WaitForSeconds(1.0f);
         this.systemMessage.SendMessage("TakenDownBlackCurtain");
         yield return new WaitForSeconds(1.0f);
         this.monsterController.SendMessage("StarIntoHoleAnimation");
         yield return new WaitForSeconds(1.0f);
         this.systemMessage.SendMessage("TakenUpBlackCurtain");
         yield return new WaitForSeconds(1.0f);
+
         this.phaseControlerComponent.SetPhase(Phase.Player);
+        this.gameMessageWindows.SendMessage("DisplayTexts", Phase.Player);
     }
 
-    void GameOver()
+
+    void StartGameOver()
     {
+        StartCoroutine("GameOver");
 
     }
 
-    void Result()
+    IEnumerator GameOver()
+    {
+        Debug.Log("GameOver");
+        this.phaseControlerComponent.SetPhase(Phase.GameOver);
+        this.gameMessageWindows.SendMessage("EraseTexts");
+
+        // Miss演出開始
+        yield return new WaitForSeconds(1.0f);
+        this.systemMessage.SendMessage("DisplayMessage", Messages.MISS);
+        yield return new WaitForSeconds(4.0f);
+        // 暗幕移動
+        this.systemMessage.SendMessage("MoveBlackCurtain", Screens.Game);
+        this.systemMessage.SendMessage("TakenDownBlackCurtain");
+        yield return new WaitForSeconds(1.0f);
+
+        // Result画面へ
+        GoToResult();
+    }
+
+    void StartStageClear()
+    {
+        StartCoroutine("StageClear");
+    }
+
+    IEnumerator StageClear()
+    {
+        Debug.Log("StageClear");
+        this.phaseControlerComponent.SetPhase(Phase.StageClear);
+        this.gameMessageWindows.SendMessage("EraseTexts");
+
+        // Cler演出開始
+        yield return new WaitForSeconds(1.0f);
+        this.systemMessage.SendMessage("DisplayMessage", Messages.CLEAR);
+        yield return new WaitForSeconds(4.0f);
+
+        // 暗幕移動
+        this.systemMessage.SendMessage("MoveBlackCurtain", Screens.Game);
+        this.systemMessage.SendMessage("TakenDownBlackCurtain");
+        yield return new WaitForSeconds(1.0f);
+
+        // 次のステージ作成
+        this.stageController.SendMessage("UpdateStageLevel");
+
+        // タッチ数初期化
+        this.touchManager.SendMessage("RestTouchNumber");
+
+        StartMemorizePhase();
+
+        yield return new WaitForSeconds(2.0f);
+
+    }
+
+    void StartGameClear()
+    {
+        StartCoroutine("GameClear");
+    }
+
+    IEnumerator GameClear()
+    {
+        Debug.Log("GameClear");
+        this.phaseControlerComponent.SetPhase(Phase.GameClear);
+        this.gameMessageWindows.SendMessage("EraseTexts");
+
+        // Miss演出開始
+        yield return new WaitForSeconds(1.0f);
+        this.systemMessage.SendMessage("DisplayMessage", Messages.CONGRATULATIONS);
+        yield return new WaitForSeconds(4.0f);
+        // 暗幕移動
+        this.systemMessage.SendMessage("MoveBlackCurtain", Screens.Game);
+        this.systemMessage.SendMessage("TakenDownBlackCurtain");
+        yield return new WaitForSeconds(1.0f);
+
+        // Result画面へ
+        GoToResult();
+    }
+
+    void GoToResult()
     {
 
+        // MainCameraをResult画面へ移動
+        this.mainCamera.SendMessage("CameraMove", Screens.Result);
+
+        // ステージ初期化
+        // Touchmanagerタッチ数初期化
+        // Title初期化
+        // 暗幕削除
+
+        // Resultテキスト表示
+        // アクター生成
 
 
+    }
+
+    void GoToTitle()
+    {
 
     }
 }

@@ -52,13 +52,13 @@ public class MonsterController : MonoBehaviour {
 
     IEnumerator ShowsUpAnimation()
     {
-        //yield return new WaitForSeconds(0.1f);
 
         if (this.orderNumber < this.orderList.Count)
         {
             Debug.Log(this.orderList[orderNumber]);
             GameObject monsterObject = this.holeObjectList[this.orderList[orderNumber] - 1];
-            Debug.Log(monsterObject.name);
+            
+            //Debug.Log(monsterObject.name);
             monsterObject.SendMessage("ShowsUp");
             this.orderNumber++;
         }
@@ -68,11 +68,6 @@ public class MonsterController : MonoBehaviour {
             Debug.Log("Monster Animation Finish");
             this.gameController.SendMessage("StartPlayerPhase");
             this.orderNumber = 0;
-            /*
-            this.holeObjectList.Clear();
-            this.orderList.Clear();
-            this.orderNumber = 0;
-            */
         }
     }
 
@@ -86,5 +81,9 @@ public class MonsterController : MonoBehaviour {
             monsterObject.SendMessage("IntoHole");
             order++;
         }
+
+        this.holeObjectList.Clear();
+        this.orderList.Clear();
+        this.orderNumber = 0;
     }
 }

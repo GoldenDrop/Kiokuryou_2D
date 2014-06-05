@@ -4,19 +4,19 @@ using System.Collections;
 public class SystemMessage : MonoBehaviour {
 
     const string BLACK_CURTAIN = "BlackCurtain";
-    GameObject blackCurtain;
 
+    Transform blackCurtain;
     Transform countDown;
-    Vector2 startPoint;
-    Quaternion rotation;
+
+    Vector3 startPoint;
 
     // リソースまでのパス
     const string PATH = "Prefabs/Messages/";
 
 	void Start () 
     {
-        this.countDown = gameObject.transform.Find("CountDown");
-        this.rotation.eulerAngles = new Vector3(0, 0, 0.0f);
+        this.blackCurtain = gameObject.transform.Find("BlackCurtain");
+        this.countDown    = gameObject.transform.Find("CountDown");
 	}
 	
 
@@ -47,29 +47,21 @@ public class SystemMessage : MonoBehaviour {
         }
     }
 
-    void CreateBlackCurtain(Screens screen)
+    void MoveBlackCurtain(Screens screen)
     {
         switch (screen)
         {
             case Screens.Title:
-                this.startPoint = new Vector2(0.0f, 0.0f);
+                this.startPoint = new Vector3( 0.0f,  0.0f, 0.0f);
                 break;
             case Screens.Game:
-                this.startPoint = new Vector2(0.0f, 15.0f);
+                this.startPoint = new Vector3( 0.0f, 15.0f, 0.0f);
                 break;
             case Screens.Result:
-                this.startPoint = new Vector2(20.0f, 15.0f);
+                this.startPoint = new Vector3(20.0f, 15.0f, 0.0f);
                 break;
         }
-        string blackCurtainPath = PATH + BLACK_CURTAIN;
-        GameObject blackCurtainPrefab = Resources.Load(blackCurtainPath) as GameObject;
-        this.blackCurtain = Instantiate(blackCurtainPrefab, this.startPoint, this.rotation) as GameObject;
-        this.blackCurtain.transform.parent = gameObject.transform;
-    }
-
-    void DestroyBlackCurtain ()
-    {
-        Destroy(this.blackCurtain);
+        this.blackCurtain.transform.localPosition = this.startPoint;
     }
 
 }

@@ -36,7 +36,6 @@ public class TouchManager : MonoBehaviour {
         this.phaseController   = GameObject.FindWithTag("PhaseController");
         this.monsterController = GameObject.FindWithTag("MonsterController");
 
-
         this.phaseControlerComponent = this.phaseController.GetComponent<PhaseController>();
 
     }
@@ -105,6 +104,7 @@ public class TouchManager : MonoBehaviour {
                             this.touchNumber++;
                             Debug.Log("Monster TouchNumber : " + this.touchNumber);
                             this.hit.collider.gameObject.SendMessage("CheckTurn", this.touchNumber);
+                            
                             break;
                         case "Hole":
                             this.touchNumber++;
@@ -112,6 +112,7 @@ public class TouchManager : MonoBehaviour {
                             this.toucedHole = this.hit.collider.gameObject;
                             this.toucedHole.SendMessage("CreateMissBalloon");
                             // miss処理を送る
+                            this.gameController.SendMessage("StartGameOver");
                             break;
                     }
                 }
