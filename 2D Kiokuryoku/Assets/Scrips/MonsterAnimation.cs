@@ -11,10 +11,12 @@ public class MonsterAnimation : MonoBehaviour {
     // リソースまでのパス
     const string PATH = "Prefabs/Balloon/B_";
 
-    const float BALLOON_OFFSET_X = 0.6f;
+    const float BALLOON_OFFSET_X = 0.65f;
 
     // GameObjectへの参照
     GameObject monsterController;
+    GameObject gameController;
+    GameObject stageController;
 
     // オーダー番号の吹き出し
     GameObject orderBalloon;
@@ -24,6 +26,9 @@ public class MonsterAnimation : MonoBehaviour {
     void Start()
     {
         this.monsterController = GameObject.FindWithTag("MonsterController");
+        this.gameController    = GameObject.FindWithTag("GameController");
+        this.stageController   = GameObject.FindWithTag("StageController");
+
 
         this.animator = gameObject.GetComponent<Animator>();
 
@@ -42,6 +47,7 @@ public class MonsterAnimation : MonoBehaviour {
             if (this.myOrder == order) // 正解なら
             {
                 this.isTouched = true;
+                this.stageController.SendMessage("CheckKilledMonsterNumber");
                 JumpsOut();
             }
             else // 不正解なら
@@ -54,6 +60,7 @@ public class MonsterAnimation : MonoBehaviour {
                 CreateBalloon(BalloonType.Angry);
 
                 // missメッセージを出す
+                this.gameController.SendMessage("StartGameOver");
             }
         }
     }
@@ -91,6 +98,10 @@ public class MonsterAnimation : MonoBehaviour {
             case BalloonType.Angry:
                 balloonPath = PATH + BalloonType.Angry.ToString();
                 break;
+
+            case BalloonType.Hit:
+                balloonPath = PATH + BalloonType.Hit.ToString();
+                break;
         }
 
         GameObject balloonPrefab = Resources.Load(balloonPath) as GameObject;
@@ -121,6 +132,11 @@ public class MonsterAnimation : MonoBehaviour {
     void DisplayNumbersBalloon()
     {
         CreateBalloon(BalloonType.Numbers);
+    }
+
+    void DisplayHitBalloon()
+    {
+        CreateBalloon(BalloonType.Hit);
     }
     // ********** AnimationEventで呼ぶ関数　ここまで **********
 

@@ -12,7 +12,7 @@ public class TouchManager : MonoBehaviour {
 
     // ゲームオブジェクトへの参照
     GameObject mainCamera;
-    GameObject title;
+    GameObject titleScreen;
     GameObject result;
     GameObject gameController;
     GameObject phaseController;
@@ -30,12 +30,11 @@ public class TouchManager : MonoBehaviour {
     void Start()
     {
         this.mainCamera        = GameObject.FindWithTag("MainCamera");
-        this.title             = GameObject.FindWithTag("Title");
-        this.result            = GameObject.FindWithTag("Result");
+        this.titleScreen       = GameObject.FindWithTag("TitleScreen");
+        this.result            = GameObject.FindWithTag("ResultScreen");
         this.gameController    = GameObject.FindWithTag("GameController");
         this.phaseController   = GameObject.FindWithTag("PhaseController");
         this.monsterController = GameObject.FindWithTag("MonsterController");
-
 
         this.phaseControlerComponent = this.phaseController.GetComponent<PhaseController>();
 
@@ -78,7 +77,7 @@ public class TouchManager : MonoBehaviour {
             if (touch.phase == TouchPhase.Began)
             {
                 this.phaseControlerComponent.SetPhase(Phase.Wait);
-                this.title.SendMessage("DestroyTexts");
+                this.titleScreen.SendMessage("DestroyTexts");
                 this.gameController.SendMessage("StartMemorizePhase");
             }
         }
@@ -105,6 +104,7 @@ public class TouchManager : MonoBehaviour {
                             this.touchNumber++;
                             Debug.Log("Monster TouchNumber : " + this.touchNumber);
                             this.hit.collider.gameObject.SendMessage("CheckTurn", this.touchNumber);
+                            
                             break;
                         case "Hole":
                             this.touchNumber++;
@@ -112,6 +112,7 @@ public class TouchManager : MonoBehaviour {
                             this.toucedHole = this.hit.collider.gameObject;
                             this.toucedHole.SendMessage("CreateMissBalloon");
                             // miss処理を送る
+                            this.gameController.SendMessage("StartGameOver");
                             break;
                     }
                 }
@@ -120,7 +121,7 @@ public class TouchManager : MonoBehaviour {
     }
 
 
-    // Result画面でのタッチ操作
+    // Result画面でのタッチ操作 
     void ResultOperate()
     {
         if (Input.touchCount > 0)
@@ -129,7 +130,19 @@ public class TouchManager : MonoBehaviour {
             Debug.Log("ResultOperate");
             if (touch.phase == TouchPhase.Began)
             {
-               
+               this.hit = Physics2D.Raycast(this.touch_point, Vector2.zero);
+                if (this.hit)
+                {
+                    switch (this.hit.collider.gameObject.name)
+                    {
+                        case "OKButton":
+                            Debug.Log("OKButton Touched");
+                            this.gameController.SendMessage("GoToTitleScreen");
+                            break;
+
+                        // ボタン追加の予定あり
+                    }
+                }
             }
         }
     }

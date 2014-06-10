@@ -8,7 +8,7 @@ public class HolesShuffle : MonoBehaviour {
     public GameObject holePrefab;
 
     // モンスターを格納
-    public GameObject[] monstersPrefabList;
+    public GameObject[] monstersPrefabList = new GameObject[6];
 
     // GameObjectへの参照
     GameObject monsterController;
@@ -37,23 +37,25 @@ public class HolesShuffle : MonoBehaviour {
     List<GameObject> holeObjectList = new List<GameObject>();
 
 
-	void Start () 
+	public void FindGameObject () 
     {
         this.monsterController = GameObject.FindWithTag("MonsterController");
-        CreateHolesBox();
-        RandomSelect(4);
-        CreateHoles();
+
+        //Debug
+        //CreateHolesBox();
+        //RandomSelect(4);
+        //CreateHoles();
 	}
 	
 	
 
-    void CreateHolesBox()
+    public void CreateHolesBox()
     {
         this.holesBox = Instantiate(this.holesBoxPrefab, Vector2.zero, Quaternion.identity) as GameObject;
         holesBox.transform.parent = gameObject.transform;
     }
 
-    void RandomSelect(int rand)
+    public void RandomSelect(int rand)
     {
         for (int i = 0; i < rand; i++)
         {
@@ -75,7 +77,7 @@ public class HolesShuffle : MonoBehaviour {
         }
     }
 
-    void CreateHoles()
+    public void CreateHoles()
     {
 
         for (int i = 0; i < MAX_Hole; i++)
@@ -112,14 +114,17 @@ public class HolesShuffle : MonoBehaviour {
         this.monsterController.SendMessage("SetOrderList", this.orderList);
     }
 
-    void DestroyHoles()
+    public void DestroyHoles()
     {
         Destroy(this.holesBox);
+        this.holeObjectList.Clear();
+        this.orderList.Clear();
     }
 
+    /*
     void ClearList()
     {
         this.holeObjectList.Clear();
         this.orderList.Clear();
-    }
+    }*/
 }

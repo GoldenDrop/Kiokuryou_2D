@@ -6,4 +6,5 @@ public enum BalloonType
 	Numbers,
     Miss,
     Angry,
+    Hit,
 }
