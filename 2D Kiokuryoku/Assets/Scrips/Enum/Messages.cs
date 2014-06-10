@@ -10,4 +10,6 @@ public enum Messages
     MISS,                  // ゲームオーバーのメッセージ
     BlackCurtainTakenUp,   // 暗幕をあげる
     BlackCurtainTakenDown, // 暗幕を下げる(被せる)
+    GAMEOVER,              // Result画面の表示
+    GAMECLEAR,             // Result画面の表示
 }

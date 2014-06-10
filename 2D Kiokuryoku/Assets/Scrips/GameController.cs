@@ -10,6 +10,9 @@ public class GameController : MonoBehaviour {
     GameObject gameMessageWindows;
     GameObject stageController;
     GameObject touchManager;
+    GameObject resultScreen;
+    GameObject titleScreen;
+
     
 
 
@@ -25,6 +28,10 @@ public class GameController : MonoBehaviour {
         this.gameMessageWindows = GameObject.FindWithTag("GameMessageWindows");
         this.stageController    = GameObject.FindWithTag("StageController");
         this.touchManager       = GameObject.FindWithTag("TouchManager");
+        this.resultScreen       = GameObject.FindWithTag("ResultScreen");
+        this.titleScreen        = GameObject.FindWithTag("TitleScreen");
+
+
 
 
 
@@ -116,8 +123,10 @@ public class GameController : MonoBehaviour {
         this.systemMessage.SendMessage("TakenDownBlackCurtain");
         yield return new WaitForSeconds(1.0f);
 
+        this.phaseControlerComponent.SetPhase(Phase.Wait);
+
         // Result画面へ
-        GoToResult();
+        GoToResultScreen();
     }
 
     void StartStageClear()
@@ -173,29 +182,47 @@ public class GameController : MonoBehaviour {
         this.systemMessage.SendMessage("TakenDownBlackCurtain");
         yield return new WaitForSeconds(1.0f);
 
+        this.phaseControlerComponent.SetPhase(Phase.Wait);
+
         // Result画面へ
-        GoToResult();
+        GoToResultScreen();
     }
 
-    void GoToResult()
+    void GoToResultScreen()
     {
 
         // MainCameraをResult画面へ移動
         this.mainCamera.SendMessage("CameraMove", Screens.Result);
 
-        // ステージ初期化
+        // ステージ初期化 
+        this.stageController.SendMessage("ResetStage");
+
         // Touchmanagerタッチ数初期化
-        // Title初期化
-        // 暗幕削除
+        this.touchManager.SendMessage("RestTouchNumber");
 
         // Resultテキスト表示
         // アクター生成
+        this.resultScreen.SendMessage("SetValueAndActors");
 
-
+        this.phaseControlerComponent.SetPhase(Phase.Result);
     }
 
-    void GoToTitle()
+
+    void GoToTitleScreen()
     {
+        // テキストを非表示にする
+        this.resultScreen.SendMessage("EraseTexts");
+
+        // Message,ActorのgameObjectを削除
+        this.resultScreen.SendMessage("DestroyObjects");
+
+        // MainCameraをTitlet画面へ移動
+        this.mainCamera.SendMessage("CameraMove", Screens.Title);
+
+        // Titleのテキストを表示させる
+        this.titleScreen.SendMessage("CreateTexts");
+
+        this.phaseControlerComponent.SetPhase(Phase.Result);
 
     }
 }
