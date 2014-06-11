@@ -13,8 +13,8 @@ public class GameController : MonoBehaviour {
     GameObject resultScreen;
     GameObject titleScreen;
 
-    
 
+    int clearStageLevel = 0;
 
 
     PhaseController phaseControlerComponent;
@@ -30,10 +30,6 @@ public class GameController : MonoBehaviour {
         this.touchManager       = GameObject.FindWithTag("TouchManager");
         this.resultScreen       = GameObject.FindWithTag("ResultScreen");
         this.titleScreen        = GameObject.FindWithTag("TitleScreen");
-
-
-
-
 
         this.phaseControlerComponent = this.phaseController.GetComponent<PhaseController>();
         this.phaseControlerComponent.SetPhase(Phase.Title);
@@ -126,7 +122,7 @@ public class GameController : MonoBehaviour {
         this.phaseControlerComponent.SetPhase(Phase.Wait);
 
         // Result画面へ
-        GoToResultScreen();
+        GoToResultScreen(Phase.GameOver);
     }
 
     void StartStageClear()
@@ -138,6 +134,7 @@ public class GameController : MonoBehaviour {
     {
         Debug.Log("StageClear");
         this.phaseControlerComponent.SetPhase(Phase.StageClear);
+        this.clearStageLevel++;
         this.gameMessageWindows.SendMessage("EraseTexts");
 
         // Cler演出開始
@@ -170,7 +167,9 @@ public class GameController : MonoBehaviour {
     IEnumerator GameClear()
     {
         Debug.Log("GameClear");
+
         this.phaseControlerComponent.SetPhase(Phase.GameClear);
+        this.clearStageLevel++;
         this.gameMessageWindows.SendMessage("EraseTexts");
 
         // Miss演出開始
@@ -185,10 +184,10 @@ public class GameController : MonoBehaviour {
         this.phaseControlerComponent.SetPhase(Phase.Wait);
 
         // Result画面へ
-        GoToResultScreen();
+        GoToResultScreen(Phase.GameClear);
     }
 
-    void GoToResultScreen()
+    void GoToResultScreen(Phase phase)
     {
 
         // MainCameraをResult画面へ移動
@@ -200,10 +199,13 @@ public class GameController : MonoBehaviour {
         // Touchmanagerタッチ数初期化
         this.touchManager.SendMessage("RestTouchNumber");
 
+        //CreateMessageObject
+        this.resultScreen.SendMessage("CreateMessageObject", phase);
+
         // Resultテキスト表示
         // アクター生成
-        this.resultScreen.SendMessage("SetValueAndActors");
-
+        this.resultScreen.SendMessage("SetValueAndActors", this.clearStageLevel);
+        this.clearStageLevel = 0;
         this.phaseControlerComponent.SetPhase(Phase.Result);
     }
 
@@ -222,7 +224,7 @@ public class GameController : MonoBehaviour {
         // Titleのテキストを表示させる
         this.titleScreen.SendMessage("CreateTexts");
 
-        this.phaseControlerComponent.SetPhase(Phase.Result);
+        this.phaseControlerComponent.SetPhase(Phase.Title);
 
     }
 }

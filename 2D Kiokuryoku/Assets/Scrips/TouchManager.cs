@@ -127,12 +127,20 @@ public class TouchManager : MonoBehaviour {
         if (Input.touchCount > 0)
         {
             this.touch = Input.touches[0];
+            this.touch_point = Camera.main.ScreenToWorldPoint(this.touch.position);
+
             Debug.Log("ResultOperate");
             if (touch.phase == TouchPhase.Began)
             {
+                Debug.Log("ResultOperate Began");
                this.hit = Physics2D.Raycast(this.touch_point, Vector2.zero);
                 if (this.hit)
                 {
+                    Debug.Log("ResultOperate hit");
+                    Debug.Log(this.hit.collider.gameObject.name);
+                    Debug.Log(this.hit.collider.gameObject.tag);
+
+
                     switch (this.hit.collider.gameObject.name)
                     {
                         case "OKButton":

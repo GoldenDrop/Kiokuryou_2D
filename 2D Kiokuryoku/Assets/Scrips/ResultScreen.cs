@@ -11,12 +11,15 @@ public class ResultScreen : MonoBehaviour {
     Transform bottomText;
 
     const string MESSAGE_PATH = "Prefabs/Messages/";
-    const string ACTOR_PATH   = "Prefabs/Actor/";
+    const string ACTOR_PATH   = "Prefabs/Actors/";
+
+    const string YOU   = "そなたに、";
+    const string GIVES = "の称号を与える";
 
 
     const float MESSAGE_X = 20.0f;
-    const float MESSAGE_Y = 20.0f;
-    const float ACTOR_X   =  3.5f;
+    const float MESSAGE_Y =  3.2f;
+    const float ACTOR_X   = 20.0f;
     const float ACTOR_Y   =  0.5f;
 
 
@@ -33,7 +36,9 @@ public class ResultScreen : MonoBehaviour {
         this.bottomText = gameObject.transform.Find("BottomText");
 
         SetLists();
+        SetText();
         EraseTexts();
+
     }
 
     // 各リストに中身をセット　valueListには称号名、acterListにはActorオブジェクト名
@@ -46,27 +51,35 @@ public class ResultScreen : MonoBehaviour {
                                         Actors.ACTOR6, Actors.ACTOR7, Actors.ACTOR8, Actors.ACTOR9, Actors.ACTOR10,};
     }
 
-    void CreateMessageObject(Messages message)
+    // テキストをセット
+    void SetText()
+    {
+        this.topText.guiText.text    = YOU;
+        this.bottomText.guiText.text = GIVES;
+    }
+
+
+    // メッセージオブジェクトをトップに生成
+    void CreateMessageObject(Phase phase)
     {
         Vector3 messagePoint = new Vector3(MESSAGE_X, MESSAGE_Y, 0);
         string objectPath = "";
-        switch (message)
+        switch (phase)
         {
-            case Messages.GAMECLEAR:
+            case Phase.GameClear:
                 objectPath = MESSAGE_PATH + Messages.GAMECLEAR.ToString();
                 break;
 
-            case Messages.GAMEOVER:
+            case Phase.GameOver:
                 objectPath = MESSAGE_PATH + Messages.GAMEOVER.ToString();
                 break;
         }
-
         GameObject messagePrefab = Resources.Load(objectPath) as GameObject;
         this.messageObject = Instantiate(messagePrefab, messagePoint, Quaternion.identity) as GameObject;
         this.messageObject.transform.parent = gameObject.transform;
     }
 
-
+    
     // ResultScreenにあるGameObjectを削除
     void DestroyObjects()
     {
@@ -93,8 +106,16 @@ public class ResultScreen : MonoBehaviour {
     // 称号をセット
     void SetValueAndActors(int stageLevel)
     {
-        this.valueText.guiText.text = this.valueList[stageLevel - 1];
-        string path = ACTOR_PATH + this.acterList[stageLevel - 1];
+        string value = this.valueList[stageLevel];
+        string actor = this.acterList[stageLevel];
+        if (stageLevel > 0) // クリアステージが0以外なら
+        {
+            value = this.valueList[stageLevel - 1];
+            actor = this.acterList[stageLevel - 1];
+        }
+
+        this.valueText.guiText.text = value;
+        string path = ACTOR_PATH + actor;
 
         Vector3 actorPoint = new Vector3(ACTOR_X, ACTOR_Y, 0);
         GameObject valuePrefab = Resources.Load(path) as GameObject;
