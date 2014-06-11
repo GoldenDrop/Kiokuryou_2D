@@ -12,9 +12,12 @@ public class GameController : MonoBehaviour {
     GameObject touchManager;
     GameObject resultScreen;
     GameObject titleScreen;
+    GameObject bgmPlayer;
+    GameObject sePlayer;
 
-    
 
+
+    int clearStageLevel = 0;
 
 
     PhaseController phaseControlerComponent;
@@ -30,9 +33,8 @@ public class GameController : MonoBehaviour {
         this.touchManager       = GameObject.FindWithTag("TouchManager");
         this.resultScreen       = GameObject.FindWithTag("ResultScreen");
         this.titleScreen        = GameObject.FindWithTag("TitleScreen");
-
-
-
+        this.bgmPlayer          = GameObject.FindWithTag("BGMPlayer");
+        this.sePlayer           = GameObject.FindWithTag("SEPlayer");
 
 
         this.phaseControlerComponent = this.phaseController.GetComponent<PhaseController>();
@@ -64,6 +66,9 @@ public class GameController : MonoBehaviour {
         // 暗幕移動
         this.systemMessage.SendMessage("TakenUpBlackCurtain");
         yield return new WaitForSeconds(1.0f);
+
+        // BGMをならす
+        this.bgmPlayer.SendMessage("Play", BGM.BGM_01);
 
         // カウントダウン開始
         this.phaseControlerComponent.SetPhase(Phase.Memorizes);
@@ -114,10 +119,14 @@ public class GameController : MonoBehaviour {
         this.phaseControlerComponent.SetPhase(Phase.GameOver);
         this.gameMessageWindows.SendMessage("EraseTexts");
 
+        // BGM停止
+        this.bgmPlayer.SendMessage("Stop");
+
         // Miss演出開始
         yield return new WaitForSeconds(1.0f);
+        this.sePlayer.SendMessage("Play", SE.SE_08);
         this.systemMessage.SendMessage("DisplayMessage", Messages.MISS);
-        yield return new WaitForSeconds(4.0f);
+        yield return new WaitForSeconds(3.0f);
         // 暗幕移動
         this.systemMessage.SendMessage("MoveBlackCurtain", Screens.Game);
         this.systemMessage.SendMessage("TakenDownBlackCurtain");
@@ -126,7 +135,7 @@ public class GameController : MonoBehaviour {
         this.phaseControlerComponent.SetPhase(Phase.Wait);
 
         // Result画面へ
-        GoToResultScreen();
+        GoToResultScreen(Phase.GameOver);
     }
 
     void StartStageClear()
@@ -138,10 +147,16 @@ public class GameController : MonoBehaviour {
     {
         Debug.Log("StageClear");
         this.phaseControlerComponent.SetPhase(Phase.StageClear);
+        this.clearStageLevel++;
+        Debug.Log("****************************** GameController ClearStageLevel : " + this.clearStageLevel++);
         this.gameMessageWindows.SendMessage("EraseTexts");
+
+        // BGM停止
+        this.bgmPlayer.SendMessage("Stop");
 
         // Cler演出開始
         yield return new WaitForSeconds(1.0f);
+        this.sePlayer.SendMessage("Play", SE.SE_06);
         this.systemMessage.SendMessage("DisplayMessage", Messages.CLEAR);
         yield return new WaitForSeconds(4.0f);
 
@@ -170,11 +185,17 @@ public class GameController : MonoBehaviour {
     IEnumerator GameClear()
     {
         Debug.Log("GameClear");
+
         this.phaseControlerComponent.SetPhase(Phase.GameClear);
+        this.clearStageLevel++;
         this.gameMessageWindows.SendMessage("EraseTexts");
+
+        // BGM停止
+        this.bgmPlayer.SendMessage("Stop");
 
         // Miss演出開始
         yield return new WaitForSeconds(1.0f);
+        this.sePlayer.SendMessage("Play", SE.SE_07);
         this.systemMessage.SendMessage("DisplayMessage", Messages.CONGRATULATIONS);
         yield return new WaitForSeconds(4.0f);
         // 暗幕移動
@@ -185,10 +206,10 @@ public class GameController : MonoBehaviour {
         this.phaseControlerComponent.SetPhase(Phase.Wait);
 
         // Result画面へ
-        GoToResultScreen();
+        GoToResultScreen(Phase.GameClear);
     }
 
-    void GoToResultScreen()
+    void GoToResultScreen(Phase phase)
     {
 
         // MainCameraをResult画面へ移動
@@ -200,10 +221,13 @@ public class GameController : MonoBehaviour {
         // Touchmanagerタッチ数初期化
         this.touchManager.SendMessage("RestTouchNumber");
 
+        //CreateMessageObject
+        this.resultScreen.SendMessage("CreateMessageObject", phase);
+
         // Resultテキスト表示
         // アクター生成
-        this.resultScreen.SendMessage("SetValueAndActors");
-
+        this.resultScreen.SendMessage("SetValueAndActors", this.clearStageLevel);
+        this.clearStageLevel = 0;
         this.phaseControlerComponent.SetPhase(Phase.Result);
     }
 
@@ -222,7 +246,7 @@ public class GameController : MonoBehaviour {
         // Titleのテキストを表示させる
         this.titleScreen.SendMessage("CreateTexts");
 
-        this.phaseControlerComponent.SetPhase(Phase.Result);
+        this.phaseControlerComponent.SetPhase(Phase.Title);
 
     }
 }

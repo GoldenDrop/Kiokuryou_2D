@@ -17,6 +17,7 @@ public class MonsterAnimation : MonoBehaviour {
     GameObject monsterController;
     GameObject gameController;
     GameObject stageController;
+    GameObject sePlayer;
 
     // オーダー番号の吹き出し
     GameObject orderBalloon;
@@ -28,6 +29,8 @@ public class MonsterAnimation : MonoBehaviour {
         this.monsterController = GameObject.FindWithTag("MonsterController");
         this.gameController    = GameObject.FindWithTag("GameController");
         this.stageController   = GameObject.FindWithTag("StageController");
+        this.sePlayer          = GameObject.FindWithTag("SEPlayer");
+
 
 
         this.animator = gameObject.GetComponent<Animator>();
@@ -47,6 +50,7 @@ public class MonsterAnimation : MonoBehaviour {
             if (this.myOrder == order) // 正解なら
             {
                 this.isTouched = true;
+                this.sePlayer.SendMessage("Play", SE.SE_04);
                 this.stageController.SendMessage("CheckKilledMonsterNumber");
                 JumpsOut();
             }
@@ -55,7 +59,7 @@ public class MonsterAnimation : MonoBehaviour {
                 Debug.Log("Touch Miss");
 
                 // SEをならす
-
+                this.sePlayer.SendMessage("Play", SE.SE_05);
                 // AngryBalloonを作成する
                 CreateBalloon(BalloonType.Angry);
 
@@ -93,6 +97,7 @@ public class MonsterAnimation : MonoBehaviour {
         {
             case BalloonType.Numbers:
                 balloonPath = PATH + this.myOrder;
+                this.sePlayer.SendMessage("Play", SE.SE_10);
                 break;
 
             case BalloonType.Angry:

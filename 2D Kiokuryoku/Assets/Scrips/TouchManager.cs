@@ -17,6 +17,7 @@ public class TouchManager : MonoBehaviour {
     GameObject gameController;
     GameObject phaseController;
     GameObject monsterController;
+    GameObject sePlayer;
 
     // タッチされたハズレの穴
     GameObject toucedHole;
@@ -35,6 +36,8 @@ public class TouchManager : MonoBehaviour {
         this.gameController    = GameObject.FindWithTag("GameController");
         this.phaseController   = GameObject.FindWithTag("PhaseController");
         this.monsterController = GameObject.FindWithTag("MonsterController");
+        this.sePlayer          = GameObject.FindWithTag("SEPlayer");
+
 
         this.phaseControlerComponent = this.phaseController.GetComponent<PhaseController>();
 
@@ -76,6 +79,7 @@ public class TouchManager : MonoBehaviour {
             Debug.Log("TitleOperate");
             if (touch.phase == TouchPhase.Began)
             {
+                this.sePlayer.SendMessage("Play", SE.SE_01);
                 this.phaseControlerComponent.SetPhase(Phase.Wait);
                 this.titleScreen.SendMessage("DestroyTexts");
                 this.gameController.SendMessage("StartMemorizePhase");
@@ -111,6 +115,7 @@ public class TouchManager : MonoBehaviour {
                             Debug.Log("Hole TouchNumber : " + this.touchNumber);
                             this.toucedHole = this.hit.collider.gameObject;
                             this.toucedHole.SendMessage("CreateMissBalloon");
+                            this.sePlayer.SendMessage("Play", SE.SE_05);
                             // miss処理を送る
                             this.gameController.SendMessage("StartGameOver");
                             break;
@@ -127,16 +132,25 @@ public class TouchManager : MonoBehaviour {
         if (Input.touchCount > 0)
         {
             this.touch = Input.touches[0];
+            this.touch_point = Camera.main.ScreenToWorldPoint(this.touch.position);
+
             Debug.Log("ResultOperate");
             if (touch.phase == TouchPhase.Began)
             {
+                Debug.Log("ResultOperate Began");
                this.hit = Physics2D.Raycast(this.touch_point, Vector2.zero);
                 if (this.hit)
                 {
+                    Debug.Log("ResultOperate hit");
+                    Debug.Log(this.hit.collider.gameObject.name);
+                    Debug.Log(this.hit.collider.gameObject.tag);
+
+
                     switch (this.hit.collider.gameObject.name)
                     {
                         case "OKButton":
                             Debug.Log("OKButton Touched");
+                            this.sePlayer.SendMessage("Play", SE.SE_01);
                             this.gameController.SendMessage("GoToTitleScreen");
                             break;
 
