@@ -11,4 +11,7 @@ public static class SE {
     public const string SE_06 = "StageClear";
     public const string SE_07 = "GameClear";
     public const string SE_08 = "GameOver";
+    public const string SE_09 = "ShowsUp";
+    public const string SE_10 = "Jump";
+
 }

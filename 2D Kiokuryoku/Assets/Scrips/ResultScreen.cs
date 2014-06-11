@@ -20,7 +20,7 @@ public class ResultScreen : MonoBehaviour {
     const float MESSAGE_X = 20.0f;
     const float MESSAGE_Y =  3.2f;
     const float ACTOR_X   = 20.0f;
-    const float ACTOR_Y   =  0.5f;
+    const float ACTOR_Y   = -0.8f;
 
 
 
@@ -44,11 +44,11 @@ public class ResultScreen : MonoBehaviour {
     // 各リストに中身をセット　valueListには称号名、acterListにはActorオブジェクト名
     void SetLists()
     {
-        this.valueList = new string[] {Values.VALUE1, Values.VALUE2, Values.VALUE3, Values.VALUE4, Values.VALUE5, 
-                                       Values.VALUE6, Values.VALUE7, Values.VALUE8, Values.VALUE9, Values.VALUE10,};
+        this.valueList = new string[] {Values.VALUE_00, Values.VALUE_01, Values.VALUE_02, Values.VALUE_03, Values.VALUE_04, Values.VALUE_05, 
+                                       Values.VALUE_06, Values.VALUE_07, Values.VALUE_08, Values.VALUE_09, Values.VALUE_10,};
 
-        this.acterList = new string[] { Actors.ACTOR1, Actors.ACTOR2, Actors.ACTOR3, Actors.ACTOR4, Actors.ACTOR5,
-                                        Actors.ACTOR6, Actors.ACTOR7, Actors.ACTOR8, Actors.ACTOR9, Actors.ACTOR10,};
+        this.acterList = new string[] {Actors.ACTOR_00, Actors.ACTOR_01, Actors.ACTOR_02, Actors.ACTOR_03, Actors.ACTOR_04, Actors.ACTOR_05,
+                                       Actors.ACTOR_06, Actors.ACTOR_07, Actors.ACTOR_08, Actors.ACTOR_09, Actors.ACTOR_10,};
     }
 
     // テキストをセット
@@ -74,6 +74,7 @@ public class ResultScreen : MonoBehaviour {
                 objectPath = MESSAGE_PATH + Messages.GAMEOVER.ToString();
                 break;
         }
+        Debug.Log("******* ResultScreen objectPath : " + objectPath);
         GameObject messagePrefab = Resources.Load(objectPath) as GameObject;
         this.messageObject = Instantiate(messagePrefab, messagePoint, Quaternion.identity) as GameObject;
         this.messageObject.transform.parent = gameObject.transform;
@@ -106,6 +107,7 @@ public class ResultScreen : MonoBehaviour {
     // 称号をセット
     void SetValueAndActors(int stageLevel)
     {
+        Debug.Log("****** ClearStageLvel : " + (stageLevel - 1));
         string value = this.valueList[stageLevel];
         string actor = this.acterList[stageLevel];
         if (stageLevel > 0) // クリアステージが0以外なら
