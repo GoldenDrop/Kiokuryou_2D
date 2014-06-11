@@ -13,7 +13,7 @@ public class CountDown : MonoBehaviour {
     const int MAX_NUMBER = 4;
     int count;
 
-    GameObject monsterController;
+    GameObject sePlayer;
 
     Messages message = Messages.None;
 
@@ -22,7 +22,8 @@ public class CountDown : MonoBehaviour {
 	void Start () 
     {
         this.count = MAX_NUMBER;
-        this.monsterController = GameObject.FindWithTag("MonsterController");
+        this.sePlayer = GameObject.FindWithTag("SEPlayer");
+
 	}
 	
 	void Update () 
@@ -40,23 +41,25 @@ public class CountDown : MonoBehaviour {
                     case 3:
                         GameObject three = Instantiate(this.threePrefab, Vector2.zero, Quaternion.identity) as GameObject;
                         three.transform.parent = gameObject.transform;
+                        this.sePlayer.SendMessage("Play", SE.SE_02);
                         break;
                     case 2:
                         GameObject two = Instantiate(this.twoPrefab, Vector2.zero, Quaternion.identity) as GameObject;
                         two.transform.parent = gameObject.transform;
+                        this.sePlayer.SendMessage("Play", SE.SE_02);
                         break;
                     case 1:
                         GameObject one = Instantiate(this.onePrefab, Vector2.zero, Quaternion.identity) as GameObject;
                         one.transform.parent = gameObject.transform;
-
+                        this.sePlayer.SendMessage("Play", SE.SE_02);
                         break;
                     case 0:
                         GameObject start = Instantiate(this.startPrefab, Vector2.zero, Quaternion.identity) as GameObject;
                         start.transform.parent = gameObject.transform;
+                        this.sePlayer.SendMessage("Play", SE.SE_03);
                         break;
                     case -1:
                         this.count = MAX_NUMBER;
-                        //this.monsterController.SendMessage("StartShowsUpAnimation");
                         this.message = Messages.None;
                         break;
                 }
