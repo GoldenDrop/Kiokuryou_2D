@@ -84,7 +84,7 @@ public class StageController : MonoBehaviour {
             this.gameMessageWindows.SendMessage("ResetKilledMonster");
 
             // 最終ステージなら
-            if (this.stageLevel == this.stageMonsterNumberList.Length - 8) // -8 はDebug用
+            if (this.stageLevel == this.stageMonsterNumberList.Length) // -8 はDebug用
             {
                 this.gameController.SendMessage("StartGameClear");
 
