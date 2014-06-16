@@ -64,6 +64,8 @@ public class GameController : MonoBehaviour {
         this.systemMessage.SendMessage("TakenUpBlackCurtain");
         yield return new WaitForSeconds(1.0f);
 
+        // BGMのボリュームを、ここで元に戻しておく
+        this.bgmPlayer.SendMessage("SetVolume", 1);
         // BGMをならす
         this.bgmPlayer.SendMessage("Play", BGM.BGM_01);
 
