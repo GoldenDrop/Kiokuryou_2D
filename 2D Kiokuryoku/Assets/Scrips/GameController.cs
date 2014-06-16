@@ -231,6 +231,9 @@ public class GameController : MonoBehaviour {
         //CreateMessageObject
         this.resultScreen.SendMessage("CreateMessageObject", phase);
 
+        // 称号のテスト　デバッグ用
+        //this.clearStageLevel =10; 
+        
         // Resultテキスト表示
         // アクター生成
         this.resultScreen.SendMessage("SetValueAndActors", this.clearStageLevel);

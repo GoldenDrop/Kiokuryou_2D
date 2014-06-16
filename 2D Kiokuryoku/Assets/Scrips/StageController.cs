@@ -68,7 +68,7 @@ public class StageController : MonoBehaviour {
     {
 
         this.killedMonsterNumber = 0;
-        this.shuffleComponent.CreateHolesBox();
+        this.shuffleComponent.CreateHolesBox(this.stageLevel);
         this.shuffleComponent.RandomSelect(this.info.monsterNumber);
         this.shuffleComponent.CreateHoles();
     }
@@ -76,6 +76,7 @@ public class StageController : MonoBehaviour {
     void CheckKilledMonsterNumber()
     {
         this.killedMonsterNumber++;
+        this.gameMessageWindows.SendMessage("UpdateKilledMonster");
 
         // 全てのモンスターを倒したなら
         if (this.killedMonsterNumber == this.info.monsterNumber)
