@@ -3,7 +3,7 @@ using System.Collections;
 
 public static class SE {
 
-    public const string SE_01 = "Taiko";
+    public const string SE_01 = "Click";
     public const string SE_02 = "CountDown";
     public const string SE_03 = "Alert";
     public const string SE_04 = "Right";

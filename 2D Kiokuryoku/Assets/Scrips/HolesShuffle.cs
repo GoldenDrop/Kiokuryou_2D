@@ -8,7 +8,7 @@ public class HolesShuffle : MonoBehaviour {
     public GameObject holePrefab;
 
     // モンスターを格納
-    public GameObject[] monstersPrefabList = new GameObject[6];
+    public GameObject[] monstersPrefabList = new GameObject[7];
 
     // GameObjectへの参照
     GameObject monsterController;
@@ -36,21 +36,18 @@ public class HolesShuffle : MonoBehaviour {
     // Hole,Monsterオブジェクトを格納
     List<GameObject> holeObjectList = new List<GameObject>();
 
+    // 現在のステージレベル
+    int stageLevel = 0;
 
 	public void FindGameObject () 
     {
         this.monsterController = GameObject.FindWithTag("MonsterController");
-
-        //Debug
-        //CreateHolesBox();
-        //RandomSelect(4);
-        //CreateHoles();
 	}
 	
-	
 
-    public void CreateHolesBox()
+    public void CreateHolesBox(int level)
     {
+        this.stageLevel = level;
         this.holesBox = Instantiate(this.holesBoxPrefab, Vector2.zero, Quaternion.identity) as GameObject;
         holesBox.transform.parent = gameObject.transform;
     }
@@ -95,7 +92,7 @@ public class HolesShuffle : MonoBehaviour {
             Debug.Log("Number[" + i + "] order : " + order);
             if (order != -1)
             {
-                int chooseNumber = Random.Range(0, monstersPrefabList.Length);
+                int chooseNumber = MonserRandomSelect();
                 GameObject monster = Instantiate(monstersPrefabList[chooseNumber], holePoint, Quaternion.identity) as GameObject;
                 monster.transform.parent = this.holesBox.transform;
                 order++;
@@ -121,10 +118,30 @@ public class HolesShuffle : MonoBehaviour {
         this.orderList.Clear();
     }
 
-    /*
-    void ClearList()
+    int MonserRandomSelect()
     {
-        this.holeObjectList.Clear();
-        this.orderList.Clear();
-    }*/
+        int selectIndex = 0;
+        if (this.stageLevel == 1)
+        {
+            selectIndex = 0;
+        }
+        else if (this.stageLevel < 4)
+        {
+            selectIndex = Random.Range(0, 2);
+        }
+        else if (this.stageLevel < 7)
+        {
+            selectIndex = Random.Range(0, 4);
+        }
+        else if (this.stageLevel < 9)
+        {
+            selectIndex = Random.Range(1, 4);
+        }
+        else
+        {
+            selectIndex = Random.Range(4, 7);
+        }
+
+        return selectIndex;
+    }
 }

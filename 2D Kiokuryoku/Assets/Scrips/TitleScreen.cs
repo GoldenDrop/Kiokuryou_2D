@@ -3,11 +3,13 @@ using System.Collections;
 
 public class TitleScreen : MonoBehaviour {
 
-    public GameObject titleTextPrefab;
+    public GameObject titlePrefab;
     public GameObject touchStartTextPrefab;
 
     GameObject title;
     GameObject touchStart;
+
+    
 
 
     void Start()
@@ -15,17 +17,19 @@ public class TitleScreen : MonoBehaviour {
         CreateTexts();
     }
 
-
-
     void CreateTexts()
     {
-        this.title = Instantiate(this.titleTextPrefab, new Vector3(0.5f, 0.6f, 0), Quaternion.identity) as GameObject;
+        // 題字テキストオブジェクト生成
+        this.title = Instantiate(this.titlePrefab, new Vector3(0.5f, 0.6f, 0), Quaternion.identity) as GameObject;
+
+        // タッチスタート　テキストオブジェクト生成
         this.touchStart = Instantiate(this.touchStartTextPrefab, new Vector3(0.5f, 0.2f, 0), Quaternion.identity) as GameObject;
     }
 
     void DestroyTexts()
     {
         Destroy(this.title);
+
         Destroy(this.touchStart);
     }
 

@@ -3,6 +3,7 @@ using System.Collections;
 
 public class GameController : MonoBehaviour {
 
+    // ゲームオブジェクトへの参照
     GameObject phaseController;
     GameObject systemMessage;
     GameObject mainCamera;
@@ -15,10 +16,11 @@ public class GameController : MonoBehaviour {
     GameObject bgmPlayer;
     GameObject sePlayer;
 
-
-
+    // クリアしたステージレベル
     int clearStageLevel = 0;
 
+    // BGMのボリューム
+    float bgmValume = 0.2f;
 
     PhaseController phaseControlerComponent;
 
@@ -41,11 +43,6 @@ public class GameController : MonoBehaviour {
         this.phaseControlerComponent.SetPhase(Phase.Title);
 	}
 	
-	void Update () 
-    {
-        //Debug.Log("Phase is " + this.phaseControlerComponent.GetPhase());
-	}
-
     void StartMemorizePhase()
     {
         Debug.Log("StartMemorizePhase");
@@ -67,6 +64,8 @@ public class GameController : MonoBehaviour {
         this.systemMessage.SendMessage("TakenUpBlackCurtain");
         yield return new WaitForSeconds(1.0f);
 
+        // BGMのボリュームを、ここで元に戻しておく
+        this.bgmPlayer.SendMessage("SetVolume", 1);
         // BGMをならす
         this.bgmPlayer.SendMessage("Play", BGM.BGM_01);
 
@@ -79,8 +78,6 @@ public class GameController : MonoBehaviour {
         // モンスターのアニメーション開始
         this.monsterController.SendMessage("StartShowsUpAnimation");
     }
-
-    
 
 
     void StartPlayerPhase()
@@ -119,8 +116,9 @@ public class GameController : MonoBehaviour {
         this.phaseControlerComponent.SetPhase(Phase.GameOver);
         this.gameMessageWindows.SendMessage("EraseTexts");
 
-        // BGM停止
-        this.bgmPlayer.SendMessage("Stop");
+        
+        // BGMのボリュームを下げる
+        this.bgmPlayer.SendMessage("SetVolume", this.bgmValume);
 
         // Miss演出開始
         yield return new WaitForSeconds(1.0f);
@@ -132,11 +130,15 @@ public class GameController : MonoBehaviour {
         this.systemMessage.SendMessage("TakenDownBlackCurtain");
         yield return new WaitForSeconds(1.0f);
 
+        // BGM停止
+        this.bgmPlayer.SendMessage("Stop");
+
         this.phaseControlerComponent.SetPhase(Phase.Wait);
 
         // Result画面へ
         GoToResultScreen(Phase.GameOver);
     }
+
 
     void StartStageClear()
     {
@@ -148,12 +150,12 @@ public class GameController : MonoBehaviour {
         Debug.Log("StageClear");
         this.phaseControlerComponent.SetPhase(Phase.StageClear);
         this.clearStageLevel++;
-        Debug.Log("****************************** GameController ClearStageLevel : " + this.clearStageLevel++);
+        Debug.Log("****************************** GameController ClearStageLevel : " + this.clearStageLevel);
         this.gameMessageWindows.SendMessage("EraseTexts");
 
-        // BGM停止
-        this.bgmPlayer.SendMessage("Stop");
-
+        // BGMのボリュームを下げる
+        this.bgmPlayer.SendMessage("SetVolume", this.bgmValume);
+        
         // Cler演出開始
         yield return new WaitForSeconds(1.0f);
         this.sePlayer.SendMessage("Play", SE.SE_06);
@@ -171,11 +173,14 @@ public class GameController : MonoBehaviour {
         // タッチ数初期化
         this.touchManager.SendMessage("RestTouchNumber");
 
+        // BGM停止
+        this.bgmPlayer.SendMessage("Stop");
+
         StartMemorizePhase();
 
         yield return new WaitForSeconds(2.0f);
-
     }
+
 
     void StartGameClear()
     {
@@ -190,9 +195,9 @@ public class GameController : MonoBehaviour {
         this.clearStageLevel++;
         this.gameMessageWindows.SendMessage("EraseTexts");
 
-        // BGM停止
-        this.bgmPlayer.SendMessage("Stop");
-
+        // BGMのボリュームを下げる
+        this.bgmPlayer.SendMessage("SetVolume", this.bgmValume);
+        
         // Miss演出開始
         yield return new WaitForSeconds(1.0f);
         this.sePlayer.SendMessage("Play", SE.SE_07);
@@ -203,11 +208,15 @@ public class GameController : MonoBehaviour {
         this.systemMessage.SendMessage("TakenDownBlackCurtain");
         yield return new WaitForSeconds(1.0f);
 
+        // BGM停止
+        this.bgmPlayer.SendMessage("Stop");
+
         this.phaseControlerComponent.SetPhase(Phase.Wait);
 
         // Result画面へ
         GoToResultScreen(Phase.GameClear);
     }
+
 
     void GoToResultScreen(Phase phase)
     {
@@ -224,6 +233,9 @@ public class GameController : MonoBehaviour {
         //CreateMessageObject
         this.resultScreen.SendMessage("CreateMessageObject", phase);
 
+        // 称号のテスト　デバッグ用
+        //this.clearStageLevel =10; 
+        
         // Resultテキスト表示
         // アクター生成
         this.resultScreen.SendMessage("SetValueAndActors", this.clearStageLevel);
