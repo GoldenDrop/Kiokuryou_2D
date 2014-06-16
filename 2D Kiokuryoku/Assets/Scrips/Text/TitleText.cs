@@ -7,6 +7,6 @@ public class TitleText : MonoBehaviour {
 	
 	void Start () 
     {
-        gameObject.guiText.text = "勇者キヲク";
+        gameObject.guiText.text = "勇者キヲクの試練";
     }	
 }
