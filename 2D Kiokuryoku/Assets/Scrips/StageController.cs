@@ -52,7 +52,7 @@ public class StageController : MonoBehaviour {
 
     void SendStageInfo()
     {
-        this.gameMessageWindows.SendMessage("SetStageInfo", this.info);
+        this.gameMessageWindows.SendMessage("CatchStageInfo", this.info);
     }
 
     void ResetStage()
@@ -76,7 +76,7 @@ public class StageController : MonoBehaviour {
     void CheckKilledMonsterNumber()
     {
         this.killedMonsterNumber++;
-        this.gameMessageWindows.SendMessage("UpdateKilledMonster");
+        //this.gameMessageWindows.SendMessage("UpdateKilledMonster");
 
         // 全てのモンスターを倒したなら
         if (this.killedMonsterNumber == this.info.monsterNumber)
@@ -84,7 +84,7 @@ public class StageController : MonoBehaviour {
             this.gameMessageWindows.SendMessage("ResetKilledMonster");
 
             // 最終ステージなら
-            if (this.stageLevel == this.stageMonsterNumberList.Length) // -8 はDebug用
+            if (this.stageLevel == this.stageMonsterNumberList.Length) 
             {
                 this.gameController.SendMessage("StartGameClear");
 

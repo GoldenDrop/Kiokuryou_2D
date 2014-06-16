@@ -40,9 +40,11 @@ public class GameMessageWindows : MonoBehaviour {
 	}
 
     // ステージ情報をセット
-    void SetStageInfo(StageInfo info)
+    void CatchStageInfo(StageInfo info)
     {
+        this.killedMonster = 0;
         this.maxMonsterNumber = info.monsterNumber;
+        Debug.Log("maxMonsterNumber : " + maxMonsterNumber);
         this.levelText.guiText.text = LV + info.stageLevel;
 
     }
@@ -51,11 +53,6 @@ public class GameMessageWindows : MonoBehaviour {
     {
         this.killedMonster++;
         this.topText.guiText.text = ATO + (this.maxMonsterNumber - this.killedMonster) + HIKI;
-    }
-
-    void ResetKilledMonster()
-    {
-        this.killedMonster = 0;
     }
 
     void DisplayTexts (Phase phase)

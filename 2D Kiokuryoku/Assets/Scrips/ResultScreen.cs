@@ -107,15 +107,16 @@ public class ResultScreen : MonoBehaviour {
     // 称号をセット
     void SetValueAndActors(int stageLevel)
     {
-        Debug.Log("****** ClearStageLvel : " + (stageLevel - 1));
+        Debug.Log("****** ClearStageLvel : " + (stageLevel));
         string value = this.valueList[stageLevel];
         string actor = this.acterList[stageLevel];
+        /*
         if (stageLevel > 0) // クリアステージが0以外なら
         {
             value = this.valueList[stageLevel - 1];
             actor = this.acterList[stageLevel - 1];
         }
-
+        */
         this.valueText.guiText.text = value;
         string path = ACTOR_PATH + actor;
 

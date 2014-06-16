@@ -148,7 +148,7 @@ public class GameController : MonoBehaviour {
         Debug.Log("StageClear");
         this.phaseControlerComponent.SetPhase(Phase.StageClear);
         this.clearStageLevel++;
-        Debug.Log("****************************** GameController ClearStageLevel : " + this.clearStageLevel++);
+        Debug.Log("****************************** GameController ClearStageLevel : " + this.clearStageLevel);
         this.gameMessageWindows.SendMessage("EraseTexts");
 
         // BGM停止
