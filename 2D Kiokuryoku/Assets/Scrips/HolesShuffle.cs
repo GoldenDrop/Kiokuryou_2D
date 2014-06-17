@@ -9,6 +9,7 @@ public class HolesShuffle : MonoBehaviour {
 
     // モンスターを格納
     public GameObject[] monstersPrefabList = new GameObject[7];
+    public GameObject dethPrefab;
 
     // GameObjectへの参照
     GameObject monsterController;
@@ -33,7 +34,10 @@ public class HolesShuffle : MonoBehaviour {
     // 穴は5行４列の20個で左上から右へ数えて番号を付ける
     List<int> orderList = new List<int>();
 
-    // Hole,Monsterオブジェクトを格納
+    // Dethが出現する穴の番号を順に格納
+    List<int> dethList = new List<int>();
+
+    // Hole,Monster,Dethオブジェクトを格納
     List<GameObject> holeObjectList = new List<GameObject>();
 
     // 現在のステージレベル
@@ -52,9 +56,10 @@ public class HolesShuffle : MonoBehaviour {
         holesBox.transform.parent = gameObject.transform;
     }
 
-    public void RandomSelect(int rand)
+    // モンスターが出現する穴を決める
+    public void RandomSelect(int monsterNumber)
     {
-        for (int i = 0; i < rand; i++)
+        for (int i = 0; i < monsterNumber; i++)
         {
             int selectedNumber = Random.Range(1, MAX_Hole + 1);
 
@@ -74,6 +79,29 @@ public class HolesShuffle : MonoBehaviour {
         }
     }
 
+    // Dethが出現する穴を決める
+    public void DethRandomSelect(int dethNumber)
+    {
+        for (int i = 0; i < dethNumber; i++)
+        {
+            int selectedNumber = Random.Range(1, MAX_Hole + 1);
+
+            if (this.orderList.Contains(selectedNumber) || this.dethList.Contains(selectedNumber))
+            {
+                i--;
+            }
+            else
+            {
+                this.dethList.Add(selectedNumber);
+            }
+        }
+
+        for (int j = 0; j < this.dethList.Count; j++)
+        {
+            Debug.Log("dethList[" + j + "] : " + this.dethList[j]);
+        }
+    }
+
     public void CreateHoles()
     {
 
@@ -88,27 +116,47 @@ public class HolesShuffle : MonoBehaviour {
 
             Vector2 holePoint = new Vector2(FIRST_X + col * OFFSET_X, FIRST_Y + row * OFFSET_Y);
 
-            int order = this.orderList.FindIndex(x => x == i + 1);
-            Debug.Log("Number[" + i + "] order : " + order);
-            if (order != -1)
+            int monsterOrder = this.orderList.FindIndex(x => x == i + 1);
+            Debug.Log("Number[" + i + "] monsterOrder : " + monsterOrder);
+            if (monsterOrder != -1)
             {
                 int chooseNumber = MonsterRandomSelect();
                 GameObject monster = Instantiate(monstersPrefabList[chooseNumber], holePoint, Quaternion.identity) as GameObject;
                 monster.transform.parent = this.holesBox.transform;
-                order++;
-                monster.SendMessage("SetMyOrder", order);
+                monsterOrder++;
+                monster.SendMessage("SetMyOrder", monsterOrder);
                 this.holeObjectList.Add(monster);
+            } 
+            else 
+            {
+                int dethOrder = this.dethList.FindIndex(x => x == i + 1);
+                Debug.Log("Number[" + i + "] dethOrder : " + dethOrder);
+                if (dethOrder != -1)
+                {
+                    GameObject deth = Instantiate(dethPrefab, holePoint, Quaternion.identity) as GameObject;
+                    deth.transform.parent = this.holesBox.transform;
+                    this.holeObjectList.Add(deth);
+                }
+                else
+                {
+                    GameObject hole = Instantiate(holePrefab, holePoint, Quaternion.identity) as GameObject;
+                    hole.transform.parent = this.holesBox.transform;
+                    this.holeObjectList.Add(hole);
+                }
             }
+            /*
             else
             {
                 GameObject hole = Instantiate(holePrefab, holePoint, Quaternion.identity) as GameObject;
                 hole.transform.parent = this.holesBox.transform;
                 this.holeObjectList.Add(hole);
 
-            }
+            }*/
         }
         this.monsterController.SendMessage("SetHoleObjectList", this.holeObjectList);
         this.monsterController.SendMessage("SetOrderList", this.orderList);
+        this.monsterController.SendMessage("SetDethList", this.dethList);
+
     }
 
     public void DestroyHoles()
@@ -116,6 +164,8 @@ public class HolesShuffle : MonoBehaviour {
         Destroy(this.holesBox);
         this.holeObjectList.Clear();
         this.orderList.Clear();
+        this.dethList.Clear();
+
     }
 
     int MonsterRandomSelect()

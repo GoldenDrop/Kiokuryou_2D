@@ -70,6 +70,7 @@ public class StageController : MonoBehaviour {
         this.killedMonsterNumber = 0;
         this.shuffleComponent.CreateHolesBox(this.stageLevel);
         this.shuffleComponent.RandomSelect(this.info.monsterNumber);
+        this.shuffleComponent.DethRandomSelect(2);
         this.shuffleComponent.CreateHoles();
     }
 

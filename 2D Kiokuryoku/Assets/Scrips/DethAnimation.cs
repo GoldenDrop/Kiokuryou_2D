@@ -5,7 +5,7 @@ public class DethAnimation : MonoBehaviour {
     Animator animator;
 
     // リソースまでのパス
-    const string PATH = "Prefabs/Balloon/B_Deth";
+    const string PATH = "Prefabs/Balloon/B_";
 
     const float BALLOON_OFFSET_X = 0.65f;
 
@@ -41,6 +41,9 @@ public class DethAnimation : MonoBehaviour {
 
         Vector3 balloonPoint = new Vector3(0, BALLOON_OFFSET_X, 0);
         string balloonPath = PATH + type.ToString();
+
+        // Debug
+        balloonPath = PATH + "Hit";
 
         GameObject balloonPrefab = Resources.Load(balloonPath) as GameObject;
         this.balloon = Instantiate(balloonPrefab, transform.position + balloonPoint, Quaternion.identity) as GameObject;
