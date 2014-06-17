@@ -7,4 +7,6 @@ public enum BalloonType
     Miss,
     Angry,
     Hit,
+    DethShows,
+    DethJumps,
 }

@@ -61,6 +61,10 @@ public class MonsterController : MonoBehaviour {
             //Debug.Log(monsterObject.name);
             monsterObject.SendMessage("ShowsUp");
             this.orderNumber++;
+
+            // orderNumberとdethOrderList[0]を比べる
+            // if orderNumber == dethOrderList[0]ならdethOrderListから[0]のGameObjectにアニメーション命令＆削除
+            
         }
         else
         {
@@ -81,6 +85,8 @@ public class MonsterController : MonoBehaviour {
             monsterObject.SendMessage("IntoHole");
             order++;
         }
+
+        // for dethOrderListにもIntoHoleを送る
 
         this.holeObjectList.Clear();
         this.orderList.Clear();

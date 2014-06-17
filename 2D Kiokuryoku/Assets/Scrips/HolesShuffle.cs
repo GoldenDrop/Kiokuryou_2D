@@ -92,7 +92,7 @@ public class HolesShuffle : MonoBehaviour {
             Debug.Log("Number[" + i + "] order : " + order);
             if (order != -1)
             {
-                int chooseNumber = MonserRandomSelect();
+                int chooseNumber = MonsterRandomSelect();
                 GameObject monster = Instantiate(monstersPrefabList[chooseNumber], holePoint, Quaternion.identity) as GameObject;
                 monster.transform.parent = this.holesBox.transform;
                 order++;
@@ -118,7 +118,7 @@ public class HolesShuffle : MonoBehaviour {
         this.orderList.Clear();
     }
 
-    int MonserRandomSelect()
+    int MonsterRandomSelect()
     {
         int selectIndex = 0;
         if (this.stageLevel == 1)
