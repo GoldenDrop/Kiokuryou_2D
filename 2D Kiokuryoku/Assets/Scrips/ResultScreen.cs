@@ -20,7 +20,7 @@ public class ResultScreen : MonoBehaviour {
     const float MESSAGE_X = 20.0f;
     const float MESSAGE_Y =  3.2f;
     const float ACTOR_X   = 20.0f;
-    const float ACTOR_Y   = -0.8f;
+    const float ACTOR_Y   = -1.0f;
 
 
 
