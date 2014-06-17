@@ -13,5 +13,6 @@ public static class SE {
     public const string SE_08 = "GameOver";
     public const string SE_09 = "ShowsUp";
     public const string SE_10 = "Jump";
+    public const string SE_11 = "Deth";
 
 }

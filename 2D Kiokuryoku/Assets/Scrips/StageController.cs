@@ -16,8 +16,11 @@ public class StageController : MonoBehaviour {
     // やつけたモンスター数
     int killedMonsterNumber = 0;
 
-    // ステージ毎の出現モンスター数のリスト
+    // ステージ毎のモンスター出現数のリスト
     int[] stageMonsterNumberList = new int[] {3, 4, 5, 6, 7, 8, 9, 10, 12, 15};
+
+    // ステージ毎のDeth出現数のリスト
+    int[] stageDethNumberList = new int[] {0, 1, 1, 2, 2, 2, 2, 3, 3, 3};
 
     StageInfo info;
 
@@ -47,7 +50,7 @@ public class StageController : MonoBehaviour {
 
     void SetStageInfo ()
     {
-        this.info = new StageInfo(this.stageLevel, this.stageMonsterNumberList[this.stageLevel - 1]);
+        this.info = new StageInfo(this.stageLevel, this.stageMonsterNumberList[this.stageLevel - 1], this.stageDethNumberList[this.stageLevel - 1]);
     }
 
     void SendStageInfo()
@@ -70,7 +73,7 @@ public class StageController : MonoBehaviour {
         this.killedMonsterNumber = 0;
         this.shuffleComponent.CreateHolesBox(this.stageLevel);
         this.shuffleComponent.RandomSelect(this.info.monsterNumber);
-        this.shuffleComponent.DethRandomSelect(2);
+        this.shuffleComponent.DethRandomSelect(this.info.dethNumber);
         this.shuffleComponent.CreateHoles();
     }
 
