@@ -119,6 +119,16 @@ public class TouchManager : MonoBehaviour {
                             // miss処理を送る
                             this.gameController.SendMessage("StartGameOver");
                             break;
+
+                        case "Deth":
+                            this.touchNumber++;
+                            Debug.Log("Deth Touch!");
+                            this.toucedHole = this.hit.collider.gameObject;
+                            this.toucedHole.SendMessage("JumpsOut");
+                            this.sePlayer.SendMessage("Play", SE.SE_11);
+                            // miss処理を送る
+                            this.gameController.SendMessage("StartGameOver");
+                            break;
                     }
                 }
             }

@@ -6,10 +6,12 @@ public struct StageInfo
 
     public int stageLevel;
     public int monsterNumber;
+    public int dethNumber;
 
-    public StageInfo(int lv, int number)
+    public StageInfo(int lv, int monster, int deth)
     {
         stageLevel    = lv;
-        monsterNumber = number;
+        monsterNumber = monster;
+        dethNumber    = deth; 
     }
 }
